@@ -1,0 +1,22 @@
+# .gitignore
+
+# Maven
+/target/
+
+# Gradle
+/build/
+
+# Logs
+*.log
+
+# IDEs
+/.idea/
+/*.iml
+*.class
+*.jar
+*.war
+*.ear
+
+# OS
+.DS_Store
+Thumbs.db
