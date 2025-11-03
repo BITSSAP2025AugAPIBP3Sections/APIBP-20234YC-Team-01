@@ -1,22 +1,62 @@
 package com.example.GreenGrub.Entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.Getter;
-import lombok.Setter;
+import com.example.GreenGrub.Enumeration.AccountType;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
+
+import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "users")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class User {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Getter
-    @Setter
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(name = "id", nullable = false, updatable = false, unique = true)
+    private String id;
+
+    @NotBlank(message = "First name cannot be empty")
+    @Size(min = 2, max = 50, message = "First name must be between 2 and 50 characters")
+    @Column(name = "name", nullable = false)
     private String name;
-    @Getter
-    @Setter
+
+    @NotBlank(message = "Email cannot be empty")
+    @Email(message = "Invalid email format")
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
+    @NotBlank(message = "Password cannot be empty")
+    @Size(min = 8, message = "Password must be at least 8 characters long")
+    @Column(name = "password", nullable = false)
+    private String password;
+
+    @Pattern(regexp = "^\\d{10}$", message = "Phone number must be 10 digits")
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
+    @Schema(description = "Role of the user — donor, consumer, delivery_person, or admin")
+    private AccountType accountType;
+
+    @Column(nullable = false)
+    private boolean isActive;
+
+    @Column(nullable = false, updatable = false)
+    private String role;
+
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
 }
