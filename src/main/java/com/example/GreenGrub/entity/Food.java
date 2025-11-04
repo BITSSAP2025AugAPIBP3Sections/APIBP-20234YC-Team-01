@@ -38,11 +38,6 @@ public class Food {
     @Column(name = "description", nullable = false, length = 500)
     private String description;
 
-    @NotNull(message = "Price cannot be null")
-    @Positive(message = "Price must be greater than 0")
-    @Column(name = "price", nullable = false)
-    private Double price;
-
     @NotNull(message = "Quantity available cannot be null")
     @PositiveOrZero(message = "Quantity must be zero or positive")
     @Column(name = "quantity_available", nullable = false)
