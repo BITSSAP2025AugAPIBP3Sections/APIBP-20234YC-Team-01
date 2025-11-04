@@ -1,4 +1,4 @@
-package com.example.GreenGrub.Enumeration;
+package com.example.GreenGrub.enumeration;
 
 
 public enum UnitType {
