@@ -1,7 +1,7 @@
-package com.example.GreenGrub.Services;
+package com.example.GreenGrub.services;
 
-import com.example.GreenGrub.Entities.User;
-import com.example.GreenGrub.Repositories.UserRepository;
+import com.example.GreenGrub.entity.User;
+import com.example.GreenGrub.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

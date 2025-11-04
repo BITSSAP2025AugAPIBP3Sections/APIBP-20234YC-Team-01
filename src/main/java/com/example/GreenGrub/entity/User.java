@@ -1,6 +1,6 @@
-package com.example.GreenGrub.Entities;
+package com.example.GreenGrub.entity;
 
-import com.example.GreenGrub.Enumeration.AccountType;
+import com.example.GreenGrub.enumeration.AccountType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
