@@ -1,14 +1,18 @@
-package com.example.GreenGrub.Entities;
+package com.example.GreenGrub.entity;
 
-import com.example.GreenGrub.Enumeration.FoodType;
-import com.example.GreenGrub.Enumeration.UnitType;
-import jakarta.persistence.*;
+import com.example.GreenGrub.enumeration.FoodType;
+import com.example.GreenGrub.enumeration.UnitType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDateTime;
 
@@ -21,8 +25,6 @@ import java.time.LocalDateTime;
 public class Food {
 
     @Id
-    @GeneratedValue(generator = "uuid2")
-    @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "id", nullable = false, updatable = false, unique = true)
     private String id;
 
@@ -60,10 +62,6 @@ public class Food {
     @Enumerated(EnumType.STRING)
     @Column(name = "food_type", nullable = false)
     private FoodType foodType;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "donation_id")
-    private Donation donation;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
