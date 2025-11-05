@@ -8,6 +8,9 @@ import com.example.GreenGrub.entity.FoodRequest;
 import com.example.GreenGrub.entity.Transaction;
 import com.example.GreenGrub.enumeration.FoodType;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -28,6 +31,11 @@ public class FoodController {
     // Post Excess Food
     @PostMapping("/postExcessFood")
     @Operation(summary = "Post Excess Food", description = "Allows users to post excess food they want to provide.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Food posted successfully"),
+        @ApiResponse(responseCode = "400", description = "Invalid request data",
+            content = @Content(mediaType = "application/json"))
+    })
     public ResponseEntity<String> postExcessFood(@RequestBody Food food) {
 
         if (food == null) {
