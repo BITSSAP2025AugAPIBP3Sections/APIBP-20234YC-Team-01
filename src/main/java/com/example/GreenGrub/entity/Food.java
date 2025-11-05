@@ -43,11 +43,6 @@ public class Food {
     @Schema(description = "Description of the food item(s) posted")
     private String description;
 
-//    @NotNull(message = "Price cannot be null")
-//    @Positive(message = "Price must be greater than 0")
-//    @Column(name = "price", nullable = false)
-//    private Double price;
-
     @NotNull(message = "Quantity available cannot be null")
     @PositiveOrZero(message = "Quantity must be zero or positive")
     @Column(name = "quantity_available", nullable = false)
@@ -63,8 +58,8 @@ public class Food {
     @Column(name = "image_url")
     private String imageUrl;
 
-//    @Column(name = "is_available", nullable = false)
-//    private boolean isAvailable = true;
+    @Column(name = "is_available", nullable = false)
+    private boolean isAvailable = true;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "food_type", nullable = false)

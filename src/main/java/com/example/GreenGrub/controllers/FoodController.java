@@ -96,7 +96,7 @@ public class FoodController {
     }
 
     // Rate / Review Transaction for food request
-    @PostMapping("{foodRequestId}/rateReviewTransaction")
+    @PostMapping("/{foodRequestId}/rateReviewTransaction")
     @Operation(summary = "Rate and Review Transaction for Food Request", description = "Allows users to rate and review transactions.")
     public ResponseEntity<String> rateReviewTransactionForFoodRequest(@Valid @RequestBody TransactionReviewDTO reviewDTO, @PathVariable String foodRequestId) {
 
@@ -116,7 +116,7 @@ public class FoodController {
     }
 
     // Rate / Review Transaction for excess food post
-    @PostMapping("{foodId}/rateReviewTransaction")
+    @PostMapping("/{foodId}/rateReviewTransaction")
     @Operation(summary = "Rate and Review Transaction for excess Food Post", description = "Allows users to rate and review transactions.")
     public ResponseEntity<String> rateReviewTransactionForExcessFoodPost(@Valid @RequestBody TransactionReviewDTO reviewDTO, @PathVariable String foodId) {
 
@@ -136,7 +136,7 @@ public class FoodController {
     }
 
     // Report Food Condition / Issue for Excess Food Post
-    @PostMapping("{foodId}/reportFoodIssue")
+    @PostMapping("/{foodId}/reportFoodIssue")
     @Operation(summary = "Report Food Issue", description = "Allows users to report issues with food items.")
     public ResponseEntity<String> reportFoodIssueForExcessFoodPost(@RequestBody Issue issue, @PathVariable String foodId) {
 
@@ -146,7 +146,7 @@ public class FoodController {
     }
 
     // Report Food Condition / Issue for Food Request
-    @PostMapping("{foodRequest}/reportFoodIssue")
+    @PostMapping("/{foodRequest}/reportFoodIssue")
     @Operation(summary = "Report Food Issue", description = "Allows users to report issues with food items.")
     public ResponseEntity<String> reportFoodIssueForExcessFoodPost(@RequestBody Issue issue, @PathVariable FoodRequest foodRequest) {
 
