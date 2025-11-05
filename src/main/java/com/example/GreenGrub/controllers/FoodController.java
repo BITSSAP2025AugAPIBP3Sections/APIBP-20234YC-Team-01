@@ -79,6 +79,22 @@ public class FoodController {
         return ResponseEntity.status(HttpStatus.CREATED).body(foodRequest);
     }
 
+    // Browse Available Food
+    @GetMapping("/browseFoodRequests")
+    @Operation(summary = "Browse Food Requests", description = "Allows users to browse available food requests.")
+    public ResponseEntity<List<Food>> getFoodRequests() {
+        List<Food> availableFoodList = new ArrayList<>();
+
+        // Business logic goes here
+
+        if (availableFoodList.isEmpty()) {
+            // Return 204 No Content when no food listings are available
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(availableFoodList);
+    }
+
     // Rate / Review Transaction for food request
     @PostMapping("{foodRequestId}/rateReviewTransaction")
     @Operation(summary = "Rate and Review Transaction for Food Request", description = "Allows users to rate and review transactions.")
