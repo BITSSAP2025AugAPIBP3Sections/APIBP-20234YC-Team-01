@@ -1,6 +1,7 @@
 package com.example.GreenGrub.Controllers;
 
 import com.example.GreenGrub.dtos.TransactionReviewDTO;
+import com.example.GreenGrub.entity.Issue;
 import com.example.GreenGrub.repositories.TransactionRepository;
 import com.example.GreenGrub.entity.Food;
 import com.example.GreenGrub.entity.FoodRequest;
@@ -68,7 +69,10 @@ public class FoodController {
         return ResponseEntity.status(HttpStatus.CREATED).body(foodRequest);
     }
 
-    public ResponseEntity<String> rateReviewTransaction(@Valid @RequestBody TransactionReviewDTO reviewDTO) {
+    // Rate / Review Transaction for food request
+    @PostMapping("{foodRequestId}/rateReviewTransaction")
+    @Operation(summary = "Rate and Review Transaction for Food Request", description = "Allows users to rate and review transactions.")
+    public ResponseEntity<String> rateReviewTransactionForFoodRequest(@Valid @RequestBody TransactionReviewDTO reviewDTO, @PathVariable String foodRequestId) {
 
         Optional<Transaction> optionalTransaction = transactionRepository.findById(reviewDTO.getTransactionId());
 
@@ -85,30 +89,44 @@ public class FoodController {
         return ResponseEntity.ok("Transaction rated and reviewed successfully.");
     }
 
-    // Rate / Review Transaction
-    @PostMapping("/rateReviewTransaction")
-    @Operation(summary = "Rate and Review Transaction", description = "Allows users to rate and review transactions.")
-    public ResponseEntity<String> rateReviewTransaction(@RequestBody Transaction transaction) {
+    // Rate / Review Transaction for excess food post
+    @PostMapping("{foodId}/rateReviewTransaction")
+    @Operation(summary = "Rate and Review Transaction for excess Food Post", description = "Allows users to rate and review transactions.")
+    public ResponseEntity<String> rateReviewTransactionForExcessFoodPost(@Valid @RequestBody TransactionReviewDTO reviewDTO, @PathVariable String foodId) {
 
-        if (transaction == null || transaction.getTransactionId() == null) {
-            return ResponseEntity.badRequest().body("Transaction ID is required.");
+        Optional<Transaction> optionalTransaction = transactionRepository.findById(reviewDTO.getTransactionId());
+
+        if (optionalTransaction.isEmpty()) {
+            return ResponseEntity.badRequest().body("Transaction not found with ID: " + reviewDTO.getTransactionId());
         }
 
-        if(transaction.getRating() == null) {
-            return ResponseEntity.badRequest().body("Rating is required.");
-        }
+        Transaction transaction = optionalTransaction.get();
+        transaction.setRating(reviewDTO.getRating());
+        transaction.setReview(reviewDTO.getReview());
 
-        // Business logic goes here
+        transactionRepository.save(transaction);
 
-        return ResponseEntity.ok("Transaction rated/reviewed successfully.");
+        return ResponseEntity.ok("Transaction rated and reviewed successfully.");
     }
 
-    // Report Food Condition / Issue
-    @PostMapping("/reportFoodIssue")
+    // Report Food Condition / Issue for Excess Food Post
+    @PostMapping("{foodId}/reportFoodIssue")
     @Operation(summary = "Report Food Issue", description = "Allows users to report issues with food items.")
-    public String reportFoodIssue() {
+    public ResponseEntity<String> reportFoodIssueForExcessFoodPost(@RequestBody Issue issue, @PathVariable String foodId) {
 
-        return "";
+        // Business logic will go here
+
+        return ResponseEntity.ok("Food issue reported successfully.");
+    }
+
+    // Report Food Condition / Issue for Food Request
+    @PostMapping("{foodRequest}/reportFoodIssue")
+    @Operation(summary = "Report Food Issue", description = "Allows users to report issues with food items.")
+    public ResponseEntity<String> reportFoodIssueForExcessFoodPost(@RequestBody Issue issue, @PathVariable FoodRequest foodRequest) {
+
+        // Business logic will go here
+
+        return ResponseEntity.ok("Food issue reported successfully.");
     }
 
 

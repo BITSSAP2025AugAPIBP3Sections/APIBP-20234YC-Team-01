@@ -72,5 +72,8 @@ public class Food {
     @Column(nullable = false)
     private LocalDateTime expiresAt;
 
+    @Column
+    private String postedByUserId;
+
 }
 
