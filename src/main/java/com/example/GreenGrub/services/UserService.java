@@ -9,7 +9,7 @@ import com.example.GreenGrub.dtos.UserRegistrationRequest;
 import com.example.GreenGrub.dtos.UserResponse;
 import com.example.GreenGrub.dtos.VerificationResponse;
 import com.example.GreenGrub.entity.User;
-import com.example.GreenGrub.repositories.UserRepository;
+//import com.example.GreenGrub.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -2,6 +2,7 @@ package com.example.GreenGrub.entity;
 
 import com.example.GreenGrub.enumeration.FoodType;
 import com.example.GreenGrub.enumeration.UnitType;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -22,29 +23,35 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 @Table(name = "food_items")
+@Schema(description = "Represents an excess food item posted by a user.")
 public class Food {
 
     @Id
     @Column(name = "id", nullable = false, updatable = false, unique = true)
+    @Schema(description = "Unique identifier for the food post.")
     private String id;
 
     @NotBlank(message = "Food name cannot be empty")
     @Size(min = 2, max = 100, message = "Food name must be between 2 and 100 characters")
     @Column(name = "name", nullable = false)
+    @Schema(description = "Name of the food post")
     private String name;
 
     @NotBlank(message = "Description cannot be empty")
     @Size(max = 500, message = "Description cannot exceed 500 characters")
     @Column(name = "description", nullable = false, length = 500)
+    @Schema(description = "Description of the food item(s) posted")
     private String description;
 
     @NotNull(message = "Quantity available cannot be null")
     @PositiveOrZero(message = "Quantity must be zero or positive")
     @Column(name = "quantity_available", nullable = false)
+    @Schema(description = "Quantity of food available for donation")
     private Integer quantityAvailable;
 
     @NotNull(message = "Quantity Unit cannot be null")
     @Column(name = "unit_type",nullable = false)
+    @Schema(description = "Unit type for the quantity", example = "KILOGRAMS, SERVINGS")
     private UnitType unitType;
 
     @Pattern(regexp = "^(https?|ftp)://.*$", message = "Invalid image URL")
@@ -56,6 +63,7 @@ public class Food {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "food_type", nullable = false)
+    @Schema(description = "Type of food being posted", example = "VEGETARIAN, NON_VEGETARIAN, JAIN")
     private FoodType foodType;
 
     @Column(nullable = false, updatable = false)

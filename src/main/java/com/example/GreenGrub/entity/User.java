@@ -26,8 +26,8 @@ public class User {
     @Column(name = "id", nullable = false, updatable = false, unique = true)
     private String id;
 
-    @NotBlank(message = "First name cannot be empty")
-    @Size(min = 2, max = 50, message = "First name must be between 2 and 50 characters")
+    @NotBlank(message = "Name cannot be empty")
+    @Size(min = 2, max = 50, message = "Name must be between 2 and 50 characters")
     @Column(name = "name", nullable = false)
     private String name;
 
@@ -39,6 +39,7 @@ public class User {
     @NotBlank(message = "Password cannot be empty")
     @Size(min = 8, message = "Password must be at least 8 characters long")
     @Column(name = "password", nullable = false)
+//    @Schema(hidden = true)
     private String password;
 
     @Pattern(regexp = "^\\d{10}$", message = "Phone number must be 10 digits")
