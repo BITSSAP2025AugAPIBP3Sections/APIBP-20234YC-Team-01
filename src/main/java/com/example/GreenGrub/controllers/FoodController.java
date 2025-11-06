@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,10 +25,11 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@Profile("no-db")
 @RequestMapping("/api/v1/food")
 public class FoodController {
 
-    @Autowired
+    @Autowired(required = false)
     TransactionRepository transactionRepository;
 
     // Post Excess Food
