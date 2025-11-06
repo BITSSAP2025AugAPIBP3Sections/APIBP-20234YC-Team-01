@@ -30,8 +30,8 @@ public class DonationController {
     }
 
     // View Donation History
-    @GetMapping("/history")
-    public List<Donation> getDonationHistory(@RequestParam String userId) {
+    @GetMapping("/history/{userId}")
+    public List<Donation> getDonationHistory(@PathVariable String userId) {
         return donationService.getDonationHistory(userId);
     }
 }
