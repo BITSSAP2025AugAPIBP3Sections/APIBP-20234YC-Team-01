@@ -22,11 +22,13 @@ public class PickUpController {
     }
 
     @GetMapping("/{userId}/getAllDeliveries")
+    @Operation(description = "Get the history of all deliveries done by User")
     private ResponseEntity<String> getAllUserDeliveries(@PathVariable String userId) {
         return ResponseEntity.ok().body("Successfully retrieved deliveries for : "+userId);
     }
 
     @GetMapping("/{userId}/delivery/{deliveryId}")
+    @Operation(description = "Get the detail of a particular delivery")
     private ResponseEntity<String> getUserDelivery(@PathVariable String userId, @PathVariable String deliveryId){
         return ResponseEntity.ok().body("Successfully retrieved deliveries for : "+userId);
     }
