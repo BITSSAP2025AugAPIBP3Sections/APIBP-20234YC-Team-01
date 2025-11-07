@@ -22,6 +22,14 @@
     {
       "name": "User Management",
       "description": "Endpoints for user registration, login, verification and profile management"
+    },
+    {
+      "name": "Food Management",
+      "description": "Endpoints for creating and process food for donation"
+    },
+    {
+      "name": "Delivery Management",
+      "description": "Endpoints for handle Delivery services like pick up, delivery and update donor/recipiant with estimated time of delivery"
     }
   ],
   "paths": {
@@ -145,7 +153,7 @@
     "/api/v1/delivery/{deliveryId}/changeDeliveryStatus": {
       "put": {
         "tags": [
-          "Delivery Pick Up Management"
+          "Delivery Management"
         ],
         "summary": "Update delivery status",
         "description": "This is to change the status of delivery",
@@ -373,10 +381,250 @@
         }
       }
     },
+    "/api/v1/food/{foodRequest}/reportFoodIssue": {
+      "post": {
+        "tags": [
+          "Food Management"
+        ],
+        "summary": "Report Food Issue",
+        "description": "Allows users to report issues with food items.",
+        "operationId": "reportFoodIssueForExcessFoodPost",
+        "parameters": [
+          {
+            "name": "foodRequest",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FoodRequest"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Issue"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/food/{foodRequestId}/rateReviewTransaction": {
+      "post": {
+        "tags": [
+          "Food Management"
+        ],
+        "summary": "Rate and Review Transaction for Food Request",
+        "description": "Allows users to rate and review transactions.",
+        "operationId": "rateReviewTransactionForFoodRequest",
+        "parameters": [
+          {
+            "name": "foodRequestId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransactionReviewDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/food/{foodId}/reportFoodIssue": {
+      "post": {
+        "tags": [
+          "Food Management"
+        ],
+        "summary": "Report Food Issue",
+        "description": "Allows users to report issues with food items.",
+        "operationId": "reportFoodIssueForExcessFoodPost_1",
+        "parameters": [
+          {
+            "name": "foodId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Issue"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/food/{foodId}/rateReviewTransaction": {
+      "post": {
+        "tags": [
+          "Food Management"
+        ],
+        "summary": "Rate and Review Transaction for excess Food Post",
+        "description": "Allows users to rate and review transactions.",
+        "operationId": "rateReviewTransactionForExcessFoodPost",
+        "parameters": [
+          {
+            "name": "foodId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransactionReviewDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/food/requestFood": {
+      "post": {
+        "tags": [
+          "Food Management"
+        ],
+        "summary": "Request Food",
+        "description": "Allows users to request food from available listings.",
+        "operationId": "requestFood",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FoodRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/FoodRequest"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/food/postExcessFood": {
+      "post": {
+        "tags": [
+          "Food Management"
+        ],
+        "summary": "Post Excess Food",
+        "description": "Allows users to post excess food they want to provide.",
+        "operationId": "postExcessFood",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Food"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Food posted successfully",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request data",
+            "content": {
+              "application/json": {
+
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/delivery/createDelivery": {
       "post": {
         "tags": [
-          "Delivery Pick Up Management"
+          "Delivery Management"
         ],
         "summary": "Create Delivery",
         "description": "Create a Delivery for a Donation",
@@ -472,10 +720,118 @@
         }
       }
     },
+    "/api/v1/food/filterFood": {
+      "get": {
+        "tags": [
+          "Food Management"
+        ],
+        "summary": "Filter Food",
+        "description": "Allows users to filter food listings by category, expiry date, and location.",
+        "operationId": "filterFood",
+        "parameters": [
+          {
+            "name": "category",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "VEG",
+                "NONVEG",
+                "JAIN",
+                "WASTE"
+              ]
+            }
+          },
+          {
+            "name": "expiryAfter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "location",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Food"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/food/browseFoodRequests": {
+      "get": {
+        "tags": [
+          "Food Management"
+        ],
+        "summary": "Browse Food Requests",
+        "description": "Allows users to browse available food requests.",
+        "operationId": "getFoodRequests",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Food"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/food/browseAvailableFood": {
+      "get": {
+        "tags": [
+          "Food Management"
+        ],
+        "summary": "Browse Available Food",
+        "description": "Allows users to browse available food listings.",
+        "operationId": "browseAvailableFood",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Food"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/delivery/{userId}/getAllDeliveries": {
       "get": {
         "tags": [
-          "Delivery Pick Up Management"
+          "Delivery Management"
         ],
         "summary": "Fetch all deliveries",
         "description": "Get the history of all deliveries done by User",
@@ -507,7 +863,7 @@
     "/api/v1/delivery/{userId}/delivery/{deliveryId}": {
       "get": {
         "tags": [
-          "Delivery Pick Up Management"
+          "Delivery Management"
         ],
         "summary": "Fetch details of a delivery",
         "description": "Get the detail of a particular delivery",
@@ -707,6 +1063,164 @@
             ]
           }
         }
+      },
+      "Issue": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "foodId": {
+            "type": "string"
+          },
+          "foodRequestId": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "reportedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "FoodRequest": {
+        "type": "object",
+        "description": "Represents a food request",
+        "properties": {
+          "foodRequestId": {
+            "type": "string",
+            "description": "Unique identifier for the food request."
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the food request",
+            "maxLength": 500,
+            "minLength": 0
+          },
+          "quantityRequested": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Quantity of food requested"
+          },
+          "unitType": {
+            "type": "string",
+            "description": "Unit type for the quantity",
+            "enum": [
+              "KiloGram",
+              "Servings"
+            ],
+            "example": "KILOGRAMS, SERVINGS"
+          },
+          "foodType": {
+            "type": "string",
+            "description": "Type of food requested",
+            "enum": [
+              "VEG",
+              "NONVEG",
+              "JAIN",
+              "WASTE"
+            ],
+            "example": "VEGETARIAN, NON_VEGETARIAN, JAIN"
+          },
+          "requireOn": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "quantityRequested",
+          "unitType"
+        ]
+      },
+      "TransactionReviewDTO": {
+        "type": "object",
+        "properties": {
+          "transactionId": {
+            "type": "string"
+          },
+          "rating": {
+            "type": "integer",
+            "format": "int32",
+            "maximum": 5,
+            "minimum": 1
+          },
+          "review": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "transactionId"
+        ]
+      },
+      "Food": {
+        "type": "object",
+        "description": "Represents an excess food item posted by a user.",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the food post."
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the food post",
+            "maxLength": 100,
+            "minLength": 2
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the food item(s) posted",
+            "maxLength": 500,
+            "minLength": 0
+          },
+          "quantityAvailable": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Quantity of food available for donation"
+          },
+          "unitType": {
+            "type": "string",
+            "description": "Unit type for the quantity",
+            "enum": [
+              "KiloGram",
+              "Servings"
+            ],
+            "example": "KILOGRAMS, SERVINGS"
+          },
+          "imageUrl": {
+            "type": "string",
+            "pattern": "^(https?|ftp)://.*$"
+          },
+          "foodType": {
+            "type": "string",
+            "description": "Type of food being posted",
+            "enum": [
+              "VEG",
+              "NONVEG",
+              "JAIN",
+              "WASTE"
+            ],
+            "example": "VEGETARIAN, NON_VEGETARIAN, JAIN"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "available": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "description",
+          "name",
+          "quantityAvailable",
+          "unitType"
+        ]
       },
       "DonationReportDTO": {
         "type": "object",

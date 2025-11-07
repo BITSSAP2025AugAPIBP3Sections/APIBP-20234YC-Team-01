@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
@@ -27,6 +28,7 @@ import java.util.Optional;
 @RestController
 @Profile("no-db")
 @RequestMapping("/api/v1/food")
+@Tag(name = "Food Management" , description = "Endpoints for creating and process food for donation")
 public class FoodController {
 
     @Autowired(required = false)

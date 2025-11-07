@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/delivery")
-@Tag(name = "Delivery Pick Up Management")
+@Tag(name = "Delivery Management",description = "Endpoints for handle Delivery services like pick up, delivery and update donor/recipiant with estimated time of delivery")
 public class PickUpController {
 
     @PutMapping("/{deliveryId}/changeDeliveryStatus")
