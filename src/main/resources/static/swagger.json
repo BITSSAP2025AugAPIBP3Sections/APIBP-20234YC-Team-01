@@ -1,0 +1,820 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Green Grub",
+    "description": "This is a platform where we distribute surplus food from multiple org./restaurants"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8081",
+      "description": "localhost"
+    },
+    {
+      "url": "http://localhost:8809",
+      "description": "live"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Donation Management",
+      "description": "Endpoints for donation report, history and contacts of Donors and Recipients"
+    },
+    {
+      "name": "User Management",
+      "description": "Endpoints for user registration, login, verification and profile management"
+    }
+  ],
+  "paths": {
+    "/api/v1/users/{userId}/profile": {
+      "get": {
+        "tags": [
+          "User Management"
+        ],
+        "summary": "Get user profile",
+        "description": "Fetches the profile details of a user",
+        "operationId": "getProfile",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Profile retrieved successfully",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserProfile"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "User Management"
+        ],
+        "summary": "Update user profile",
+        "description": "Updates profile details of a user",
+        "operationId": "updateProfile",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserProfile"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Profile updated successfully",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserProfile"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/{userId}/organization": {
+      "put": {
+        "tags": [
+          "User Management"
+        ],
+        "summary": "Manage organization account",
+        "description": "Creates or updates organization details for a user",
+        "operationId": "manageOrganization",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrganizationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Organization details updated successfully",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrganizationResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/delivery/{deliveryId}/changeDeliveryStatus": {
+      "put": {
+        "tags": [
+          "Delivery Pick Up Management"
+        ],
+        "summary": "Update delivery status",
+        "description": "This is to change the status of delivery",
+        "operationId": "updateTrackerStatus",
+        "parameters": [
+          {
+            "name": "deliveryId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/donations/contact": {
+      "post": {
+        "tags": [
+          "Donation Management"
+        ],
+        "summary": "Contact Donor/Recipient",
+        "description": "Contact Donor or Recipient",
+        "operationId": "sendMessage",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MessageDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/{userId}/verify": {
+      "post": {
+        "tags": [
+          "User Management"
+        ],
+        "summary": "Verify donor or recipient",
+        "description": "Verifies the authenticity of a user as a donor or recipient",
+        "operationId": "verifyUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "roleType",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User verification completed",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerificationResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/register": {
+      "post": {
+        "tags": [
+          "User Management"
+        ],
+        "summary": "Register new user",
+        "description": "Registers a new user (individual or organization)",
+        "operationId": "registerUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserRegistrationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "User registered successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/logout": {
+      "post": {
+        "tags": [
+          "User Management"
+        ],
+        "summary": "Logout user",
+        "description": "Logs out the current user and invalidates the token",
+        "operationId": "logout",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Logout successful",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/login": {
+      "post": {
+        "tags": [
+          "User Management"
+        ],
+        "summary": "User login",
+        "description": "Authenticates a user and returns a JWT token",
+        "operationId": "login",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/delivery/createDelivery": {
+      "post": {
+        "tags": [
+          "Delivery Pick Up Management"
+        ],
+        "summary": "Create Delivery",
+        "description": "Create a Delivery for a Donation",
+        "operationId": "createDelivery",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/donations/report": {
+      "get": {
+        "tags": [
+          "Donation Management"
+        ],
+        "summary": "Fetch Donation Report",
+        "description": "This is to fetch a detailed report of donation",
+        "operationId": "generateReport",
+        "parameters": [
+          {
+            "name": "organizationId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DonationReportDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/donations/history/{userId}": {
+      "get": {
+        "tags": [
+          "Donation Management"
+        ],
+        "summary": "Fetch Donation history",
+        "description": "Fetch the history of donation by a donor",
+        "operationId": "getDonationHistory",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Donation"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/delivery/{userId}/getAllDeliveries": {
+      "get": {
+        "tags": [
+          "Delivery Pick Up Management"
+        ],
+        "summary": "Fetch all deliveries",
+        "description": "Get the history of all deliveries done by User",
+        "operationId": "getAllUserDeliveries",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/delivery/{userId}/delivery/{deliveryId}": {
+      "get": {
+        "tags": [
+          "Delivery Pick Up Management"
+        ],
+        "summary": "Fetch details of a delivery",
+        "description": "Get the detail of a particular delivery",
+        "operationId": "getUserDelivery",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "deliveryId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "UserProfile": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "contact": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "profileImage": {
+            "type": "string"
+          }
+        }
+      },
+      "OrganizationRequest": {
+        "type": "object",
+        "properties": {
+          "orgName": {
+            "type": "string"
+          },
+          "registrationNumber": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          }
+        }
+      },
+      "OrganizationResponse": {
+        "type": "object",
+        "properties": {
+          "orgId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "orgName": {
+            "type": "string"
+          },
+          "verifiedStatus": {
+            "type": "string"
+          }
+        }
+      },
+      "MessageDTO": {
+        "type": "object",
+        "properties": {
+          "senderId": {
+            "type": "string"
+          },
+          "receiverId": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "donationId": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "VerificationResponse": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "verified": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "UserRegistrationRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "DONOR",
+              "RECIPIENT",
+              "ADMIN",
+              "VOLUNTEER"
+            ]
+          }
+        }
+      },
+      "UserResponse": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "DONOR",
+              "RECIPIENT",
+              "ADMIN",
+              "VOLUNTEER"
+            ]
+          }
+        }
+      },
+      "LoginRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "DONOR",
+              "RECIPIENT",
+              "ADMIN",
+              "VOLUNTEER"
+            ]
+          }
+        }
+      },
+      "DonationReportDTO": {
+        "type": "object",
+        "properties": {
+          "organizationId": {
+            "type": "string"
+          },
+          "totalDonations": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalFoodDonated": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "Address": {
+        "type": "object",
+        "properties": {
+          "addressId": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string",
+            "maxLength": 150,
+            "minLength": 0
+          },
+          "city": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 0
+          },
+          "state": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 0
+          },
+          "pinCode": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^[1-9][0-9]{5}$"
+          },
+          "latitude": {
+            "type": "number",
+            "maximum": 90,
+            "minimum": -90
+          },
+          "longitude": {
+            "type": "number",
+            "maximum": 180,
+            "minimum": -180
+          }
+        },
+        "required": [
+          "address",
+          "city",
+          "pinCode",
+          "state"
+        ]
+      },
+      "Donation": {
+        "type": "object",
+        "properties": {
+          "donationId": {
+            "type": "string"
+          },
+          "foodIdList": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "donorId": {
+            "type": "string"
+          },
+          "recipientId": {
+            "type": "string"
+          },
+          "websiteUrl": {
+            "type": "string",
+            "pattern": "^(https?|ftp)://.*$"
+          },
+          "pickupAddress": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "deliveryAddress": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "ACCEPTED",
+              "COMPLETED",
+              "CANCELLED"
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    }
+  }
+}
