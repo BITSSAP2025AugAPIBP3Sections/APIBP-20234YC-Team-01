@@ -1,27 +1,20 @@
 package com.example.GreenGrub.services;
 
-import com.example.GreenGrub.dtos.LoginRequest;
-import com.example.GreenGrub.dtos.LoginResponse;
-import com.example.GreenGrub.dtos.OrganizationRequest;
-import com.example.GreenGrub.dtos.OrganizationResponse;
-import com.example.GreenGrub.dtos.UserProfile;
-import com.example.GreenGrub.dtos.UserRegistrationRequest;
-import com.example.GreenGrub.dtos.UserResponse;
-import com.example.GreenGrub.dtos.VerificationResponse;
+import com.example.GreenGrub.dto.LoginRequest;
+import com.example.GreenGrub.dto.LoginResponse;
+import com.example.GreenGrub.dto.OrganizationRequest;
+import com.example.GreenGrub.dto.OrganizationResponse;
+import com.example.GreenGrub.dto.UserProfile;
+import com.example.GreenGrub.dto.UserRegistrationRequest;
+import com.example.GreenGrub.dto.UserResponse;
+import com.example.GreenGrub.dto.VerificationResponse;
 import com.example.GreenGrub.entity.User;
-//import com.example.GreenGrub.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
 
-    public void saveUser(User user) {
-        userRepository.save(user);
-    }
 
     public UserResponse registerUser(UserRegistrationRequest request) {
         // TODO Auto-generated method stub

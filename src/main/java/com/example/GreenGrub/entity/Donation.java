@@ -51,12 +51,12 @@ public class Donation {
     private String websiteUrl;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "pickup_address_id")
+    @JoinColumn(name = "pickup_address_id",referencedColumnName = "address_id")
     @Valid
     private Address pickupAddress;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "delivery_address_id")
+    @JoinColumn(name = "delivery_address_id",referencedColumnName = "address_id")
     @Valid
     private Address deliveryAddress;
 

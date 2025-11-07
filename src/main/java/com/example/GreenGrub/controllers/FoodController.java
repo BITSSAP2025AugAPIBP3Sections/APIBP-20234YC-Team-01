@@ -1,6 +1,6 @@
-package com.example.GreenGrub.Controllers;
+package com.example.GreenGrub.controllers;
 
-import com.example.GreenGrub.dtos.TransactionReviewDTO;
+import com.example.GreenGrub.dto.TransactionReviewDTO;
 import com.example.GreenGrub.entity.Issue;
 import com.example.GreenGrub.repositories.TransactionRepository;
 import com.example.GreenGrub.entity.Food;

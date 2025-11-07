@@ -1,4 +1,4 @@
-package com.example.GreenGrub.dtos;
+package com.example.GreenGrub.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrganizationResponse {
-    private Long orgId;
-    private String orgName;
-    private String verifiedStatus;   
+public class LoginRequest {
+    private String email;
+    private String password;    
 }

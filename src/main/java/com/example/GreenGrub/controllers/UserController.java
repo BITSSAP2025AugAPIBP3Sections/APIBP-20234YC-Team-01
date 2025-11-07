@@ -1,6 +1,6 @@
 package com.example.GreenGrub.controllers;
 
-import com.example.GreenGrub.dtos.*;
+import com.example.GreenGrub.dto.*;
 import com.example.GreenGrub.services.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;

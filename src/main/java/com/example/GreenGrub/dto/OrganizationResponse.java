@@ -1,4 +1,4 @@
-package com.example.GreenGrub.dtos;
+package com.example.GreenGrub.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrganizationRequest {
+public class OrganizationResponse {
+    private Long orgId;
     private String orgName;
-    private String registrationNumber;
-    private String address;   
+    private String verifiedStatus;   
 }

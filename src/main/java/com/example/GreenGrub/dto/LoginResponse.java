@@ -1,4 +1,4 @@
-package com.example.GreenGrub.dtos;
+package com.example.GreenGrub.dto;
 
 import com.example.GreenGrub.enumeration.UserRole;
 

@@ -1,4 +1,4 @@
-package com.example.GreenGrub.dtos;
+package com.example.GreenGrub.dto;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

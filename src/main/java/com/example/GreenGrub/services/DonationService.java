@@ -1,7 +1,7 @@
 package com.example.GreenGrub.services;
 
-import com.example.GreenGrub.dtos.DonationReportDTO;
-import com.example.GreenGrub.dtos.MessageDTO;
+import com.example.GreenGrub.dto.DonationReportDTO;
+import com.example.GreenGrub.dto.MessageDTO;
 import com.example.GreenGrub.entity.Donation;
 import com.example.GreenGrub.repositories.DonationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
