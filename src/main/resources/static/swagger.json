@@ -1,0 +1,1334 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Green Grub",
+    "description": "This is a platform where we distribute surplus food from multiple org./restaurants"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8081",
+      "description": "localhost"
+    },
+    {
+      "url": "http://localhost:8809",
+      "description": "live"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Donation Management",
+      "description": "Endpoints for donation report, history and contacts of Donors and Recipients"
+    },
+    {
+      "name": "User Management",
+      "description": "Endpoints for user registration, login, verification and profile management"
+    },
+    {
+      "name": "Food Management",
+      "description": "Endpoints for creating and process food for donation"
+    },
+    {
+      "name": "Delivery Management",
+      "description": "Endpoints for handle Delivery services like pick up, delivery and update donor/recipient with estimated time of delivery"
+    }
+  ],
+  "paths": {
+    "/api/v1/users/{userId}/profile": {
+      "get": {
+        "tags": [
+          "User Management"
+        ],
+        "summary": "Get user profile",
+        "description": "Fetches the profile details of a user",
+        "operationId": "getProfile",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Profile retrieved successfully",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserProfile"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "User Management"
+        ],
+        "summary": "Update user profile",
+        "description": "Updates profile details of a user",
+        "operationId": "updateProfile",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserProfile"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Profile updated successfully",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserProfile"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/{userId}/organization": {
+      "put": {
+        "tags": [
+          "User Management"
+        ],
+        "summary": "Manage organization account",
+        "description": "Creates or updates organization details for a user",
+        "operationId": "manageOrganization",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrganizationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Organization details updated successfully",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrganizationResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/delivery/{deliveryId}/changeDeliveryStatus": {
+      "put": {
+        "tags": [
+          "Delivery Management"
+        ],
+        "summary": "Update delivery status",
+        "description": "This is to change the status of delivery",
+        "operationId": "updateTrackerStatus",
+        "parameters": [
+          {
+            "name": "deliveryId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/donations/contact": {
+      "post": {
+        "tags": [
+          "Donation Management"
+        ],
+        "summary": "Contact Donor/Recipient",
+        "description": "Contact Donor or Recipient",
+        "operationId": "sendMessage",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MessageDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/{userId}/verify": {
+      "post": {
+        "tags": [
+          "User Management"
+        ],
+        "summary": "Verify donor or recipient",
+        "description": "Verifies the authenticity of a user as a donor or recipient",
+        "operationId": "verifyUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "roleType",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User verification completed",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerificationResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/register": {
+      "post": {
+        "tags": [
+          "User Management"
+        ],
+        "summary": "Register new user",
+        "description": "Registers a new user (individual or organization)",
+        "operationId": "registerUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserRegistrationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "User registered successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/logout": {
+      "post": {
+        "tags": [
+          "User Management"
+        ],
+        "summary": "Logout user",
+        "description": "Logs out the current user and invalidates the token",
+        "operationId": "logout",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Logout successful",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/login": {
+      "post": {
+        "tags": [
+          "User Management"
+        ],
+        "summary": "User login",
+        "description": "Authenticates a user and returns a JWT token",
+        "operationId": "login",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/food/{foodRequest}/reportFoodIssue": {
+      "post": {
+        "tags": [
+          "Food Management"
+        ],
+        "summary": "Report Food Issue",
+        "description": "Allows users to report issues with food items.",
+        "operationId": "reportFoodIssueForExcessFoodPost",
+        "parameters": [
+          {
+            "name": "foodRequest",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FoodRequest"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Issue"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/food/{foodRequestId}/rateReviewTransaction": {
+      "post": {
+        "tags": [
+          "Food Management"
+        ],
+        "summary": "Rate and Review Transaction for Food Request",
+        "description": "Allows users to rate and review transactions.",
+        "operationId": "rateReviewTransactionForFoodRequest",
+        "parameters": [
+          {
+            "name": "foodRequestId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransactionReviewDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/food/{foodId}/reportFoodIssue": {
+      "post": {
+        "tags": [
+          "Food Management"
+        ],
+        "summary": "Report Food Issue",
+        "description": "Allows users to report issues with food items.",
+        "operationId": "reportFoodIssueForExcessFoodPost_1",
+        "parameters": [
+          {
+            "name": "foodId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Issue"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/food/{foodId}/rateReviewTransaction": {
+      "post": {
+        "tags": [
+          "Food Management"
+        ],
+        "summary": "Rate and Review Transaction for excess Food Post",
+        "description": "Allows users to rate and review transactions.",
+        "operationId": "rateReviewTransactionForExcessFoodPost",
+        "parameters": [
+          {
+            "name": "foodId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransactionReviewDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/food/requestFood": {
+      "post": {
+        "tags": [
+          "Food Management"
+        ],
+        "summary": "Request Food",
+        "description": "Allows users to request food from available listings.",
+        "operationId": "requestFood",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FoodRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/FoodRequest"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/food/postExcessFood": {
+      "post": {
+        "tags": [
+          "Food Management"
+        ],
+        "summary": "Post Excess Food",
+        "description": "Allows users to post excess food they want to provide.",
+        "operationId": "postExcessFood",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Food"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Food posted successfully",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request data",
+            "content": {
+              "application/json": {
+
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/delivery/createDelivery": {
+      "post": {
+        "tags": [
+          "Delivery Management"
+        ],
+        "summary": "Create Delivery",
+        "description": "Create a Delivery for a Donation",
+        "operationId": "createDelivery",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/donations/report": {
+      "get": {
+        "tags": [
+          "Donation Management"
+        ],
+        "summary": "Fetch Donation Report",
+        "description": "This is to fetch a detailed report of donation",
+        "operationId": "generateReport",
+        "parameters": [
+          {
+            "name": "organizationId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DonationReportDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/donations/history/{userId}": {
+      "get": {
+        "tags": [
+          "Donation Management"
+        ],
+        "summary": "Fetch Donation history",
+        "description": "Fetch the history of donation by a donor",
+        "operationId": "getDonationHistory",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Donation"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/food/filterFood": {
+      "get": {
+        "tags": [
+          "Food Management"
+        ],
+        "summary": "Filter Food",
+        "description": "Allows users to filter food listings by category, expiry date, and location.",
+        "operationId": "filterFood",
+        "parameters": [
+          {
+            "name": "category",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "VEG",
+                "NONVEG",
+                "JAIN",
+                "WASTE"
+              ]
+            }
+          },
+          {
+            "name": "expiryAfter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "location",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Food"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/food/browseFoodRequests": {
+      "get": {
+        "tags": [
+          "Food Management"
+        ],
+        "summary": "Browse Food Requests",
+        "description": "Allows users to browse available food requests.",
+        "operationId": "getFoodRequests",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Food"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/food/browseAvailableFood": {
+      "get": {
+        "tags": [
+          "Food Management"
+        ],
+        "summary": "Browse Available Food",
+        "description": "Allows users to browse available food listings.",
+        "operationId": "browseAvailableFood",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Food"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/delivery/{userId}/getAllDeliveries": {
+      "get": {
+        "tags": [
+          "Delivery Management"
+        ],
+        "summary": "Fetch all deliveries",
+        "description": "Get the history of all deliveries done by User",
+        "operationId": "getAllUserDeliveries",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/delivery/{userId}/delivery/{deliveryId}": {
+      "get": {
+        "tags": [
+          "Delivery Management"
+        ],
+        "summary": "Fetch details of a delivery",
+        "description": "Get the detail of a particular delivery",
+        "operationId": "getUserDelivery",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "deliveryId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "UserProfile": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "contact": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "profileImage": {
+            "type": "string"
+          }
+        }
+      },
+      "OrganizationRequest": {
+        "type": "object",
+        "properties": {
+          "orgName": {
+            "type": "string"
+          },
+          "registrationNumber": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          }
+        }
+      },
+      "OrganizationResponse": {
+        "type": "object",
+        "properties": {
+          "orgId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "orgName": {
+            "type": "string"
+          },
+          "verifiedStatus": {
+            "type": "string"
+          }
+        }
+      },
+      "MessageDTO": {
+        "type": "object",
+        "properties": {
+          "senderId": {
+            "type": "string"
+          },
+          "receiverId": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "donationId": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "VerificationResponse": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "verified": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "UserRegistrationRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "DONOR",
+              "RECIPIENT",
+              "ADMIN",
+              "VOLUNTEER"
+            ]
+          }
+        }
+      },
+      "UserResponse": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "DONOR",
+              "RECIPIENT",
+              "ADMIN",
+              "VOLUNTEER"
+            ]
+          }
+        }
+      },
+      "LoginRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "DONOR",
+              "RECIPIENT",
+              "ADMIN",
+              "VOLUNTEER"
+            ]
+          }
+        }
+      },
+      "Issue": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "foodId": {
+            "type": "string"
+          },
+          "foodRequestId": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "reportedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "FoodRequest": {
+        "type": "object",
+        "description": "Represents a food request",
+        "properties": {
+          "foodRequestId": {
+            "type": "string",
+            "description": "Unique identifier for the food request."
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the food request",
+            "maxLength": 500,
+            "minLength": 0
+          },
+          "quantityRequested": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Quantity of food requested"
+          },
+          "unitType": {
+            "type": "string",
+            "description": "Unit type for the quantity",
+            "enum": [
+              "KiloGram",
+              "Servings"
+            ],
+            "example": "KILOGRAMS, SERVINGS"
+          },
+          "foodType": {
+            "type": "string",
+            "description": "Type of food requested",
+            "enum": [
+              "VEG",
+              "NONVEG",
+              "JAIN",
+              "WASTE"
+            ],
+            "example": "VEGETARIAN, NON_VEGETARIAN, JAIN"
+          },
+          "requireOn": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "quantityRequested",
+          "unitType"
+        ]
+      },
+      "TransactionReviewDTO": {
+        "type": "object",
+        "properties": {
+          "transactionId": {
+            "type": "string"
+          },
+          "rating": {
+            "type": "integer",
+            "format": "int32",
+            "maximum": 5,
+            "minimum": 1
+          },
+          "review": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "transactionId"
+        ]
+      },
+      "Food": {
+        "type": "object",
+        "description": "Represents an excess food item posted by a user.",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the food post."
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the food post",
+            "maxLength": 100,
+            "minLength": 2
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the food item(s) posted",
+            "maxLength": 500,
+            "minLength": 0
+          },
+          "quantityAvailable": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Quantity of food available for donation"
+          },
+          "unitType": {
+            "type": "string",
+            "description": "Unit type for the quantity",
+            "enum": [
+              "KiloGram",
+              "Servings"
+            ],
+            "example": "KILOGRAMS, SERVINGS"
+          },
+          "imageUrl": {
+            "type": "string",
+            "pattern": "^(https?|ftp)://.*$"
+          },
+          "foodType": {
+            "type": "string",
+            "description": "Type of food being posted",
+            "enum": [
+              "VEG",
+              "NONVEG",
+              "JAIN",
+              "WASTE"
+            ],
+            "example": "VEGETARIAN, NON_VEGETARIAN, JAIN"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "available": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "description",
+          "name",
+          "quantityAvailable",
+          "unitType"
+        ]
+      },
+      "DonationReportDTO": {
+        "type": "object",
+        "properties": {
+          "organizationId": {
+            "type": "string"
+          },
+          "totalDonations": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalFoodDonated": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "Address": {
+        "type": "object",
+        "properties": {
+          "addressId": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string",
+            "maxLength": 150,
+            "minLength": 0
+          },
+          "city": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 0
+          },
+          "state": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 0
+          },
+          "pinCode": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^[1-9][0-9]{5}$"
+          },
+          "latitude": {
+            "type": "number",
+            "maximum": 90,
+            "minimum": -90
+          },
+          "longitude": {
+            "type": "number",
+            "maximum": 180,
+            "minimum": -180
+          }
+        },
+        "required": [
+          "address",
+          "city",
+          "pinCode",
+          "state"
+        ]
+      },
+      "Donation": {
+        "type": "object",
+        "properties": {
+          "donationId": {
+            "type": "string"
+          },
+          "foodIdList": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "donorId": {
+            "type": "string"
+          },
+          "recipientId": {
+            "type": "string"
+          },
+          "websiteUrl": {
+            "type": "string",
+            "pattern": "^(https?|ftp)://.*$"
+          },
+          "pickupAddress": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "deliveryAddress": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "ACCEPTED",
+              "COMPLETED",
+              "CANCELLED"
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    }
+  }
+}

@@ -13,8 +13,8 @@ import com.example.GreenGrub.entity.Donation;
 import java.util.List;
 
 @RestController
-@RequestMapping("/donations")
-@Tag(name = "Donation Management", description = "Endpoints for donation report, history and contacts of Donors and Recipients")
+@RequestMapping("/api/v1/donations")
+@Tag(name = "Donation Management", description = "Endpoints for donation report, history and contacts of Donors and Recipients, Access By [DONOR]")
 public class DonationController {
 
     @Autowired
