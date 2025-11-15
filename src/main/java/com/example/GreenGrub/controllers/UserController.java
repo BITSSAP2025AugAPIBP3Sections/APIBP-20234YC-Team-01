@@ -62,7 +62,7 @@ public class UserController {
     // ---------------------------------------------
     // 3️⃣ Profile Management
     // ---------------------------------------------
-    @Operation(summary = "Get user profile", description = "Fetches the profile details of a user")
+    @Operation(summary = "Get user profile", description = "Endpoints for manage and handle the details of a user,Access by [ADMIN,DONOR,RECIPIENT,DELIVERY]")
     @ApiResponse(responseCode = "200", description = "Profile retrieved successfully")
     @GetMapping("/{userId}/profile")
     public ResponseEntity<UserProfile> getProfile(@PathVariable Long userId) {

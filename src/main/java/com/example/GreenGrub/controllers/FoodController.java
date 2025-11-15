@@ -28,7 +28,7 @@ import java.util.Optional;
 @RestController
 @Profile("no-db")
 @RequestMapping("/api/v1/food")
-@Tag(name = "Food Management" , description = "Endpoints for creating and process food for donation")
+@Tag(name = "Food Management" , description = "Endpoints for creating and process food for donation, Access by [RECIPIENT,DONOR]")
 public class FoodController {
 
     @Autowired(required = false)
