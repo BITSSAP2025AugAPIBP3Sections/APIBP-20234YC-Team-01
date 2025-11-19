@@ -46,10 +46,10 @@ public class ExceptionFactory {
         return String.format(lTemp, args);
     }
 
-
-    public ControllerException userNotFoundException() {
+    // add your own exception like this
+    public ControllerException userNotFoundException(String pUserId) {
         var lErrorCode = ErrorCode.USER_NOT_FOUND;
-        var lMessage = mMessageSource.getMessage(lErrorCode.getErrorMessageTag(), null, Locale.getDefault());
+        var lMessage = getFormatedMessage(lErrorCode, pUserId);
         var lSuggestion = Arrays.stream(lErrorCode.getErrorSuggestionTag()).map(tag -> mMessageSource.getMessage(tag, null, Locale.getDefault())).toList();
         var error = ErrorDescription.builder().code(lErrorCode.getCode()).message(lMessage).suggestions(lSuggestion).build();
         return new ControllerException(error);
