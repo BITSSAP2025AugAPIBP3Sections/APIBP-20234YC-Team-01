@@ -16,7 +16,6 @@ public class UserProfile {
     private static String contact;
     private String address;
     private String profileImage;
-
     public static String getContact(Long userId)
     {
         return contact;
