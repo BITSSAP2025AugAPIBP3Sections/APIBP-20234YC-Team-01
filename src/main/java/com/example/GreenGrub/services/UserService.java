@@ -14,6 +14,7 @@ import com.example.GreenGrub.repositories.UserRepository;
 import lombok.AllArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -96,5 +97,9 @@ public class UserService {
     public void logout(String token) {
         // TODO Auto-generated method stub
         
+    }
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 }
