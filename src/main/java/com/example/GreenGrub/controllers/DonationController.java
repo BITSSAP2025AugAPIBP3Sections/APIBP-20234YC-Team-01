@@ -31,7 +31,8 @@ public class DonationController {
     @GetMapping("/report")
     @Operation(
         summary = "Fetch Donation Report",
-        description = "Returns a summary of donation statistics such as total donations and total food quantity donated."
+        description = "Returns a summary of donation statistics such as total donations and total food quantity " +
+            "donated.Access by [ADMIN, DONOR]"
     )
     public DonationReportDTO generateReport(@RequestParam(required = false) String userID) {
         return donationService.generateReport(userID);
@@ -44,7 +45,7 @@ public class DonationController {
     @GetMapping(value = "/report/download", produces = "text/csv")
     @Operation(
         summary = "Download Donation Report (CSV)",
-        description = "Generates a CSV summary of donations. Use userID to generate a donor-specific report."
+        description = "Generates a CSV summary of donations. Use userID to generate a donor-specific report.Access by [ADMIN, DONOR]"
     )
     public ResponseEntity<ByteArrayResource> downloadReportCsv(
         @RequestParam(required = false) String userID) throws Exception {
@@ -70,7 +71,7 @@ public class DonationController {
     @PostMapping("/contact")
     @Operation(
         summary = "Contact Donor or Recipient",
-        description = "Initiates contact sharing between donor and recipient based on the donation status."
+        description = "Initiates contact sharing between donor and recipient based on the donation status.Access by [DONOR, RECIPIENT]"
     )
     public String shareContacts(@RequestBody MessageDTO message) {
         return donationService.shareContacts(message);
@@ -82,7 +83,7 @@ public class DonationController {
     @GetMapping("/history/{userId}")
     @Operation(
         summary = "Fetch Donation History",
-        description = "Returns the complete list of donations made by the given donor."
+        description = "Returns the complete list of donations made by the given donor.Access by [DONOR]"
     )
     public List<Donation> getDonationHistory(@PathVariable String userId) {
         return donationService.getDonationHistory(userId);

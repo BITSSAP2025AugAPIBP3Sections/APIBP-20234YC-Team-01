@@ -1,6 +1,7 @@
 package com.example.GreenGrub.controllers;
 
 import com.example.GreenGrub.dto.*;
+import com.example.GreenGrub.entity.User;
 import com.example.GreenGrub.services.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -117,4 +120,11 @@ public class UserController {
         userService.logout(token);
         return ResponseEntity.ok("Logout Successful");
     }
-}
+
+    @Operation(summary = "List all users", description = "Fetch all registered users in the system")
+    @GetMapping("/list")
+    public ResponseEntity<List<User>> getAllUsers()
+    {
+        return ResponseEntity.ok(userService.getAllUsers());
+    }
+    }
