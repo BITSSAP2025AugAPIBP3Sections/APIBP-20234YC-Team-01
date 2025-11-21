@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.GreenGrub.dto.CustomUserDetails;
 import com.example.GreenGrub.entity.User;
-import com.example.GreenGrub.exception.UserNotFoundException;
+import com.example.GreenGrub.exception.ExceptionFactory;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,12 +16,12 @@ import lombok.RequiredArgsConstructor;
 public class CustomUserDetailsService implements UserDetailsService{
 
     private final UserRepository userRepository;
-    private String USER_NOT_FOUND = "User not found";
+    private final ExceptionFactory exceptionFactory;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(username).orElseThrow(
-            () -> new UserNotFoundException(USER_NOT_FOUND)
+            () -> exceptionFactory.userNotFoundException(username)
         );
         return new CustomUserDetails(user);
     }
