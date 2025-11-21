@@ -17,6 +17,7 @@ import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
@@ -40,9 +41,17 @@ public class Donation {
     @Column(name = "food_id")
     private List<String> foodIdList;
 
+    @Getter
+    @Column(name = "quantity", nullable = false)
+    private Integer quantity;
+
+    @Column(name = "requested", nullable = false)
+    private boolean requested;
+
     @Column(name = "donor_id", nullable = false)
     private String donorId;
 
+    @Getter
     @Column(name = "recipient_id")
     private String recipientId;
 
@@ -60,6 +69,7 @@ public class Donation {
     @Valid
     private Address deliveryAddress;
 
+    @Getter
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private DonationStatus status;
@@ -69,4 +79,24 @@ public class Donation {
 
     @Column(nullable = false)
     private LocalDateTime updatedAt;
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public String getDonorId()
+    {
+        return donorId;
+    }
+
+    public String getRecipientId()
+    {
+        return recipientId;
+    }
+
+    public DonationStatus getStatus()
+    {
+        return status;
+    }
+
 }

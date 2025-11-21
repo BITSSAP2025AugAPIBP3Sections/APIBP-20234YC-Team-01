@@ -16,4 +16,20 @@ public class TransactionReviewDTO {
     private Integer rating;
 
     private String review;
+
+    public @NotNull String getTransactionId()
+    {
+        return transactionId;
+    }
+
+    public @Min(1) @Max(5) Integer getRating()
+    {
+        return rating;
+    }
+
+    public String getReview()
+    {
+        return review;
+    }
+
 }
