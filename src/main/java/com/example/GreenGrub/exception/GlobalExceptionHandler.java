@@ -39,7 +39,7 @@ public class GlobalExceptionHandler {
                 desc.code(),
                 desc.message(),
                 desc.suggestions(),
-                request.getContextPath(),
+                request.getRequestURI(),
                 request.getHeader("correlationId"),
                 LocalDateTime.now()
         );
