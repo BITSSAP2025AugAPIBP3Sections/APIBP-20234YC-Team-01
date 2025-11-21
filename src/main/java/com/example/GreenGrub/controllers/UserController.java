@@ -8,6 +8,8 @@ import io.swagger.v3.oas.annotations.responses.*;
 import io.swagger.v3.oas.annotations.media.*;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+import java.util.HashMap;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -113,6 +115,6 @@ public class UserController {
     @PostMapping("/logout")
     public ResponseEntity<String> logout(@RequestHeader("Authorization") String token) {
         userService.logout(token);
-        return ResponseEntity.ok("Logout successful");
+        return ResponseEntity.ok("Logout Successful");
     }
 }
