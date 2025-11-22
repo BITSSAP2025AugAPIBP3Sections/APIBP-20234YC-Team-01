@@ -25,7 +25,7 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('local-sonar') {
+                withSonarQubeEnv('sonar-local') {
                     sh """
                         mvn -B sonar:sonar \
                           -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
