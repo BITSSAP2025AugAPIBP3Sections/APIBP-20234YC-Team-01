@@ -55,7 +55,20 @@ public class FoodController {
 
     // Browse Available Food
     @GetMapping("/browseAvailableFood")
-    @Operation(summary = "Browse Available Food", description = "Allows users to browse available food listings.")
+    @Operation(summary = "Browse Available Food",
+            description = "Allows users to browse available food listings.",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "List of available food items",
+                            content = @Content(mediaType = "application/json")
+                    ),
+                    @ApiResponse(
+                            responseCode = "204",
+                            description = "No food listings available"
+                    )
+            }
+    )
     public ResponseEntity<List<Food>> browseAvailableFood() {
         List<Food> availableFoodList = new ArrayList<>();
 
@@ -71,7 +84,26 @@ public class FoodController {
 
     // Request Food
     @PostMapping("/requestFood")
-    @Operation(summary = "Request Food", description = "Allows users to request food from available listings.")
+    @Operation(summary = "Request Food",
+            description = "Allows users to request food from available listings.",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Food request details",
+                    required = true,
+                    content = @Content(mediaType = "application/json")
+            ),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "201",
+                            description = "Food request created successfully",
+                            content = @Content(mediaType = "application/json")
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Invalid request data",
+                            content = @Content(mediaType = "application/json")
+                    )
+            }
+    )
     public ResponseEntity<FoodRequest> requestFood(@RequestBody FoodRequest foodRequest) {
 
         if (foodRequest == null) {
@@ -85,7 +117,20 @@ public class FoodController {
 
     // Browse Available Food
     @GetMapping("/browseFoodRequests")
-    @Operation(summary = "Browse Food Requests", description = "Allows users to browse available food requests.")
+    @Operation(summary = "Browse Food Requests",
+            description = "Allows users to browse available food requests.",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "List of available food requests",
+                            content = @Content(mediaType = "application/json")
+                    ),
+                    @ApiResponse(
+                            responseCode = "204",
+                            description = "No food requests available"
+                    )
+            }
+    )
     public ResponseEntity<List<Food>> getFoodRequests() {
         List<Food> availableFoodList = new ArrayList<>();
 
@@ -101,7 +146,21 @@ public class FoodController {
 
     // Rate / Review Transaction for food request
     @PostMapping("/{foodRequestId}/rateReviewTransaction")
-    @Operation(summary = "Rate and Review Transaction for Food Request", description = "Allows users to rate and review transactions.")
+    @Operation(summary = "Rate and Review Transaction for Food Request",
+            description = "Allows users to rate and review transactions.",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Transaction rated and reviewed successfully",
+                            content = @Content(mediaType = "application/json")
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Transaction not found",
+                            content = @Content(mediaType = "application/json")
+                    )
+            }
+    )
     public ResponseEntity<String> rateReviewTransactionForFoodRequest(@Valid @RequestBody TransactionReviewDTO reviewDTO, @PathVariable String foodRequestId) {
 
         Optional<Transaction> optionalTransaction = transactionRepository.findById(reviewDTO.getTransactionId());
@@ -121,7 +180,21 @@ public class FoodController {
 
     // Rate / Review Transaction for excess food post
     @PostMapping("/{foodId}/rateReviewTransaction")
-    @Operation(summary = "Rate and Review Transaction for excess Food Post", description = "Allows users to rate and review transactions.")
+    @Operation(summary = "Rate and Review Transaction for excess Food Post",
+            description = "Allows users to rate and review transactions.",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Transaction rated and reviewed successfully",
+                            content = @Content(mediaType = "application/json")
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Transaction not found",
+                            content = @Content(mediaType = "application/json")
+                    )
+            }
+    )
     public ResponseEntity<String> rateReviewTransactionForExcessFoodPost(@Valid @RequestBody TransactionReviewDTO reviewDTO, @PathVariable String foodId) {
 
         Optional<Transaction> optionalTransaction = transactionRepository.findById(reviewDTO.getTransactionId());
@@ -141,7 +214,20 @@ public class FoodController {
 
     // Report Food Condition / Issue for Excess Food Post
     @PostMapping("/{foodId}/reportFoodIssue")
-    @Operation(summary = "Report Food Issue", description = "Allows users to report issues with food items.")
+    @Operation(summary = "Report Food Issue",
+            description = "Allows users to report issues with food items.",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Food issue reported successfully",
+                            content = @Content(mediaType = "application/json")
+                    ),                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Invalid issue report",
+                            content = @Content(mediaType = "application/json")
+                    )
+            }
+    )
     public ResponseEntity<String> reportFoodIssueForExcessFoodPost(@RequestBody Issue issue, @PathVariable String foodId) {
 
         // Business logic will go here
@@ -151,7 +237,20 @@ public class FoodController {
 
     // Report Food Condition / Issue for Food Request
     @PostMapping("/{foodRequest}/reportFoodIssue")
-    @Operation(summary = "Report Food Issue", description = "Allows users to report issues with food items.")
+    @Operation(summary = "Report Food Issue",
+            description = "Allows users to report issues with food items.",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Food issue reported successfully",
+                            content = @Content(mediaType = "application/json")
+                    ),                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Invalid issue report",
+                            content = @Content(mediaType = "application/json")
+                    )
+            }
+    )
     public ResponseEntity<String> reportFoodIssueForExcessFoodPost(@RequestBody Issue issue, @PathVariable FoodRequest foodRequest) {
 
         // Business logic will go here
