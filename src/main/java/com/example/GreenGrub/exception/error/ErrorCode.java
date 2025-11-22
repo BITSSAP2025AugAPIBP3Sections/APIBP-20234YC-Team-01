@@ -23,7 +23,15 @@ public enum ErrorCode {
             "error.internalServerError.suggestion.three","error.internalServerError.suggestion.four",
             "error.internalServerError.suggestion.five"
     })
-    INTERNAL_SERVER_ERROR("500")
+    INTERNAL_SERVER_ERROR("500"),
+
+    @Error(message = "error.customerAuthError", suggestion = {
+            "error.customerAuthError.suggestion.one", "error.customerAuthError.suggestion.two"
+    })
+    CUSTOMER_AUTHENTICATION_ERROR("401"),
+
+    @Error(message = "error.userUnauthorize",suggestion = {"error.userUnauthorize.suggestion.one"})
+    CUSTOMER_AUTHORIZATION_ERROR("403"),
     ;
 
     private final String code; // this is the error code eg: 400
