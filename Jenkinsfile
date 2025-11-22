@@ -2,11 +2,12 @@ pipeline {
     agent any
 
     tools {
+        // Uses the Maven tool you configured in Manage Jenkins -> Global Tool Configuration
         maven 'maven-3'
     }
 
     environment {
-        SONAR_PROJECT_KEY = 'springboot-local'
+        SONAR_PROJECT_KEY = 'GreenGrub-local'   // you can rename this if you like
     }
 
     stages {
@@ -18,26 +19,26 @@ pipeline {
 
         stage('Build & Test') {
             steps {
-                sh 'mvn -B clean test'
+                sh "mvn -B clean test"
             }
         }
 
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('local-sonar') {
-                    sh '''
+                    sh """
                         mvn -B sonar:sonar \
-                          -Dsonar.projectKey='''' + "${SONAR_PROJECT_KEY}" + '''' \
+                          -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
                           -Dsonar.host.url=$SONAR_HOST_URL \
                           -Dsonar.login=$SONAR_AUTH_TOKEN
-                    '''
+                    """
                 }
             }
         }
 
         stage('Package') {
             steps {
-                sh 'mvn -B package -DskipTests'
+                sh "mvn -B package -DskipTests"
             }
         }
 
