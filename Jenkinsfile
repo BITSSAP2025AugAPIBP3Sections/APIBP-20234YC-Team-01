@@ -2,8 +2,7 @@ pipeline {
     agent any
 
     tools {
-        jdk 'jdk-17'          // same name as in Global Tool Configuration
-        maven 'maven-3'       // same name as in Global Tool Configuration
+        maven 'maven-3'
     }
 
     environment {
