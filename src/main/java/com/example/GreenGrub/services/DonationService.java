@@ -70,6 +70,7 @@ public class DonationService {
         String donorId = donation.getDonorId();
         String recipientId = donation.getRecipientId();
         String senderId = message.getSenderId();
+        String msg = message.getMessage() == null ? "" : message.getMessage().trim().toUpperCase();
 
         // Safe contact lookup
         java.util.function.Function<String, String> safeContact = (idStr) -> {
@@ -83,11 +84,30 @@ public class DonationService {
             }
         };
 
-        boolean acceptedAndAssigned =
-            donation.getStatus() == DonationStatus.ACCEPTED &&
-                recipientId != null && !recipientId.trim().isEmpty();
+        boolean isDonor = senderId != null && senderId.equals(donorId);
+        boolean hasRecipient = recipientId != null && !recipientId.trim().isEmpty();
+
+        if (isDonor
+            && "APPROVE".equals(msg)
+            && donation.getStatus() == DonationStatus.PENDING
+            && hasRecipient) {
+
+            donation.setStatus(DonationStatus.ACCEPTED);
+            donationRepository.save(donation);
+
+            String donorContact = safeContact.apply(donorId);
+            String recipientContact = safeContact.apply(recipientId);
+
+            return "Donation approved.\n"
+                + "Donor Phone: " + donorContact + "\n"
+                + "Recipient Phone: " + recipientContact;
+        }
 
         // CASE 1: Donation is accepted and contact should be exchanged
+        boolean acceptedAndAssigned =
+            donation.getStatus() == DonationStatus.ACCEPTED &&
+                hasRecipient;
+
         if (acceptedAndAssigned) {
 
             String donorContact = safeContact.apply(donorId);
@@ -104,7 +124,7 @@ public class DonationService {
             return "Contact details have been exchanged between the donor and the recipient.";
         }
 
-        // CASE 2: Donation not available (cancelled or zero quantity)
+        // CASE 2: Donation not available
         boolean available = donation.getQuantity() != null
             && donation.getQuantity() > 0
             && donation.getStatus() != DonationStatus.CANCELLED;
@@ -113,8 +133,8 @@ public class DonationService {
             return "This donation is not available. It may be cancelled or no food may be remaining.";
         }
 
-        // CASE 3: Sender is donor checking before approval
-        if (senderId != null && senderId.equals(donorId)) {
+        // CASE 3: Sender is donor checking before approval (but didn't send APPROVE)
+        if (isDonor) {
             return "You are the donor. The recipient's contact will be shared once you approve their request.";
         }
 
