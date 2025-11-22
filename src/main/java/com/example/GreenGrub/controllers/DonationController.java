@@ -14,7 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/donations")
@@ -73,8 +75,11 @@ public class DonationController {
         summary = "Contact Donor or Recipient",
         description = "Initiates contact sharing between donor and recipient based on the donation status.Access by [DONOR, RECIPIENT]"
     )
-    public String shareContacts(@RequestBody MessageDTO message) {
-        return donationService.shareContacts(message);
+    public ResponseEntity<Map<String, Object>> shareContacts(@RequestBody MessageDTO message) {
+        String result = donationService.shareContacts(message);
+        Map<String, Object> body = new HashMap<>();
+        body.put("message", result);
+        return ResponseEntity.ok(body);
     }
 
     /**
