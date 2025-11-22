@@ -55,4 +55,18 @@ public class ExceptionFactory {
         return new ControllerException(error);
     }
 
+    public ErrorDescription customerAuthenticationException() {
+        var lErrorCode = ErrorCode.CUSTOMER_AUTHENTICATION_ERROR;
+        var lMessage = getFormatedMessage(lErrorCode);
+        var lSuggestion = Arrays.stream(lErrorCode.getErrorSuggestionTag()).map(tag -> mMessageSource.getMessage(tag, null, Locale.getDefault())).toList();
+        return ErrorDescription.builder().code(lErrorCode.getCode()).message(lMessage).suggestions(lSuggestion).build();
+    }
+
+    public ErrorDescription customerAuthorizationException() {
+        var lErrorCode = ErrorCode.CUSTOMER_AUTHORIZATION_ERROR;
+        var lMessage = getFormatedMessage(lErrorCode);
+        var lSuggestion = Arrays.stream(lErrorCode.getErrorSuggestionTag()).map(tag -> mMessageSource.getMessage(tag, null, Locale.getDefault())).toList();
+        return ErrorDescription.builder().code(lErrorCode.getCode()).message(lMessage).suggestions(lSuggestion).build();
+    }
+
 }
