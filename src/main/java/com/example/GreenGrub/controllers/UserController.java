@@ -127,4 +127,7 @@ public class UserController {
     {
         return ResponseEntity.ok(userService.getAllUsers());
     }
+
+    @GetMapping("/ping")
+    public ResponseEntity<String> ping() {return ResponseEntity.ok("pong");}
     }
