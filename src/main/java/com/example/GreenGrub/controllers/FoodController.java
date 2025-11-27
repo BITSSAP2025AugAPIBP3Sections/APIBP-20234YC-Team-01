@@ -3,6 +3,7 @@ package com.example.GreenGrub.controllers;
 import com.example.GreenGrub.dto.TransactionReviewDTO;
 import com.example.GreenGrub.entity.Issue;
 import com.example.GreenGrub.repositories.TransactionRepository;
+import com.example.GreenGrub.repositories.FoodRepository;
 import com.example.GreenGrub.entity.Food;
 import com.example.GreenGrub.entity.FoodRequest;
 import com.example.GreenGrub.entity.Transaction;
@@ -34,6 +35,9 @@ public class FoodController {
     @Autowired(required = false)
     TransactionRepository transactionRepository;
 
+    @Autowired(required = false)
+    FoodRepository foodRepository;
+
     // Post Excess Food
     @PostMapping("/postExcessFood")
     @Operation(summary = "Post Excess Food", description = "Allows users to post excess food they want to provide.")
@@ -48,7 +52,9 @@ public class FoodController {
             return ResponseEntity.badRequest().body("Invalid request: food data is missing.");
         }
 
-        // Business logic goes here
+        food.setCreatedAt(LocalDateTime.now());
+        //Save item to database
+        foodRepository.save(food);
 
         return ResponseEntity.ok("Food posted successfully.");
     }
@@ -72,7 +78,8 @@ public class FoodController {
     public ResponseEntity<List<Food>> browseAvailableFood() {
         List<Food> availableFoodList = new ArrayList<>();
 
-        // Business logic goes here
+        //Fetch from food repository
+        availableFoodList = foodRepository.findAll();
 
         if (availableFoodList.isEmpty()) {
             // Return 204 No Content when no food listings are available
@@ -82,101 +89,101 @@ public class FoodController {
         return ResponseEntity.ok(availableFoodList);
     }
 
-    // Request Food
-    @PostMapping("/requestFood")
-    @Operation(summary = "Request Food",
-            description = "Allows users to request food from available listings.",
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "Food request details",
-                    required = true,
-                    content = @Content(mediaType = "application/json")
-            ),
-            responses = {
-                    @ApiResponse(
-                            responseCode = "201",
-                            description = "Food request created successfully",
-                            content = @Content(mediaType = "application/json")
-                    ),
-                    @ApiResponse(
-                            responseCode = "400",
-                            description = "Invalid request data",
-                            content = @Content(mediaType = "application/json")
-                    )
-            }
-    )
-    public ResponseEntity<FoodRequest> requestFood(@RequestBody FoodRequest foodRequest) {
+//     //Request Food
+//    @PostMapping("/requestFood")
+//    @Operation(summary = "Request Food",
+//            description = "Allows users to request food from available listings.",
+//            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+//                    description = "Food request details",
+//                    required = true,
+//                    content = @Content(mediaType = "application/json")
+//            ),
+//            responses = {
+//                    @ApiResponse(
+//                            responseCode = "201",
+//                            description = "Food request created successfully",
+//                            content = @Content(mediaType = "application/json")
+//                    ),
+//                    @ApiResponse(
+//                            responseCode = "400",
+//                            description = "Invalid request data",
+//                            content = @Content(mediaType = "application/json")
+//                    )
+//            }
+//    )
+//    public ResponseEntity<FoodRequest> requestFood(@RequestBody FoodRequest foodRequest) {
+//
+//        if (foodRequest == null) {
+//            return ResponseEntity.badRequest().build();
+//        }
+//
+//        // Business logic goes here
+//
+//        return ResponseEntity.status(HttpStatus.CREATED).body(foodRequest);
+//    }
 
-        if (foodRequest == null) {
-            return ResponseEntity.badRequest().build();
-        }
+//    // Browse Available Food
+//    @GetMapping("/browseFoodRequests")
+//    @Operation(summary = "Browse Food Requests",
+//            description = "Allows users to browse available food requests.",
+//            responses = {
+//                    @ApiResponse(
+//                            responseCode = "200",
+//                            description = "List of available food requests",
+//                            content = @Content(mediaType = "application/json")
+//                    ),
+//                    @ApiResponse(
+//                            responseCode = "204",
+//                            description = "No food requests available"
+//                    )
+//            }
+//    )
+//    public ResponseEntity<List<Food>> getFoodRequests() {
+//        List<Food> availableFoodList = new ArrayList<>();
+//
+//        // Business logic goes here
+//
+//        if (availableFoodList.isEmpty()) {
+//            // Return 204 No Content when no food listings are available
+//            return ResponseEntity.noContent().build();
+//        }
+//
+//        return ResponseEntity.ok(availableFoodList);
+//    }
 
-        // Business logic goes here
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(foodRequest);
-    }
-
-    // Browse Available Food
-    @GetMapping("/browseFoodRequests")
-    @Operation(summary = "Browse Food Requests",
-            description = "Allows users to browse available food requests.",
-            responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "List of available food requests",
-                            content = @Content(mediaType = "application/json")
-                    ),
-                    @ApiResponse(
-                            responseCode = "204",
-                            description = "No food requests available"
-                    )
-            }
-    )
-    public ResponseEntity<List<Food>> getFoodRequests() {
-        List<Food> availableFoodList = new ArrayList<>();
-
-        // Business logic goes here
-
-        if (availableFoodList.isEmpty()) {
-            // Return 204 No Content when no food listings are available
-            return ResponseEntity.noContent().build();
-        }
-
-        return ResponseEntity.ok(availableFoodList);
-    }
-
-    // Rate / Review Transaction for food request
-    @PostMapping("/{foodRequestId}/rateReviewTransaction")
-    @Operation(summary = "Rate and Review Transaction for Food Request",
-            description = "Allows users to rate and review transactions.",
-            responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "Transaction rated and reviewed successfully",
-                            content = @Content(mediaType = "application/json")
-                    ),
-                    @ApiResponse(
-                            responseCode = "400",
-                            description = "Transaction not found",
-                            content = @Content(mediaType = "application/json")
-                    )
-            }
-    )
-    public ResponseEntity<String> rateReviewTransactionForFoodRequest(@Valid @RequestBody TransactionReviewDTO reviewDTO, @PathVariable String foodRequestId) {
-
-        Optional<Transaction> optionalTransaction = transactionRepository.findById(reviewDTO.getTransactionId());
-
-        if (optionalTransaction.isEmpty()) {
-            return ResponseEntity.badRequest().body("Transaction not found with ID: " + reviewDTO.getTransactionId());
-        }
-
-        Transaction transaction = optionalTransaction.get();
-        transaction.setRating(reviewDTO.getRating());
-        transaction.setReview(reviewDTO.getReview());
-
-        transactionRepository.save(transaction);
-
-        return ResponseEntity.ok("Transaction rated and reviewed successfully.");
-    }
+//    // Rate / Review Transaction for food request
+//    @PostMapping("/{foodRequestId}/rateReviewTransaction")
+//    @Operation(summary = "Rate and Review Transaction for Food Request",
+//            description = "Allows users to rate and review transactions.",
+//            responses = {
+//                    @ApiResponse(
+//                            responseCode = "200",
+//                            description = "Transaction rated and reviewed successfully",
+//                            content = @Content(mediaType = "application/json")
+//                    ),
+//                    @ApiResponse(
+//                            responseCode = "400",
+//                            description = "Transaction not found",
+//                            content = @Content(mediaType = "application/json")
+//                    )
+//            }
+//    )
+//    public ResponseEntity<String> rateReviewTransactionForFoodRequest(@Valid @RequestBody TransactionReviewDTO reviewDTO, @PathVariable String foodRequestId) {
+//
+//        Optional<Transaction> optionalTransaction = transactionRepository.findById(reviewDTO.getTransactionId());
+//
+//        if (optionalTransaction.isEmpty()) {
+//            return ResponseEntity.badRequest().body("Transaction not found with ID: " + reviewDTO.getTransactionId());
+//        }
+//
+//        Transaction transaction = optionalTransaction.get();
+//        transaction.setRating(reviewDTO.getRating());
+//        transaction.setReview(reviewDTO.getReview());
+//
+//        transactionRepository.save(transaction);
+//
+//        return ResponseEntity.ok("Transaction rated and reviewed successfully.");
+//    }
 
     // Rate / Review Transaction for excess food post
     @PostMapping("/{foodId}/rateReviewTransaction")
@@ -235,28 +242,28 @@ public class FoodController {
         return ResponseEntity.ok("Food issue reported successfully.");
     }
 
-    // Report Food Condition / Issue for Food Request
-    @PostMapping("/{foodRequest}/reportFoodIssue")
-    @Operation(summary = "Report Food Issue",
-            description = "Allows users to report issues with food items.",
-            responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "Food issue reported successfully",
-                            content = @Content(mediaType = "application/json")
-                    ),                    @ApiResponse(
-                            responseCode = "400",
-                            description = "Invalid issue report",
-                            content = @Content(mediaType = "application/json")
-                    )
-            }
-    )
-    public ResponseEntity<String> reportFoodIssueForExcessFoodPost(@RequestBody Issue issue, @PathVariable FoodRequest foodRequest) {
-
-        // Business logic will go here
-
-        return ResponseEntity.ok("Food issue reported successfully.");
-    }
+//    // Report Food Condition / Issue for Food Request
+//    @PostMapping("/{foodRequest}/reportFoodIssue")
+//    @Operation(summary = "Report Food Issue",
+//            description = "Allows users to report issues with food items.",
+//            responses = {
+//                    @ApiResponse(
+//                            responseCode = "200",
+//                            description = "Food issue reported successfully",
+//                            content = @Content(mediaType = "application/json")
+//                    ),                    @ApiResponse(
+//                            responseCode = "400",
+//                            description = "Invalid issue report",
+//                            content = @Content(mediaType = "application/json")
+//                    )
+//            }
+//    )
+//    public ResponseEntity<String> reportFoodIssueForExcessFoodPost(@RequestBody Issue issue, @PathVariable FoodRequest foodRequest) {
+//
+//        // Business logic will go here
+//
+//        return ResponseEntity.ok("Food issue reported successfully.");
+//    }
 
 
     // Filter by Category / Expiry / Location
