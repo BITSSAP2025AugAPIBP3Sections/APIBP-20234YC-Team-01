@@ -1,6 +1,7 @@
 package com.example.GreenGrub.entity;
 
-import com.example.GreenGrub.enumeration.AccountType;
+import com.example.GreenGrub.enumeration.UserRole;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -9,6 +10,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.time.LocalDateTime;
 
@@ -46,14 +48,14 @@ public class User {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Schema(description = "Role of the user — donor, consumer, delivery_person, or admin")
-    private AccountType accountType;
 
     @Column(nullable = false)
     private boolean isActive;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, updatable = false)
-    private String role;
+    @Schema(description = "Role of the user — donor, recipent or admin")
+    private UserRole role;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;

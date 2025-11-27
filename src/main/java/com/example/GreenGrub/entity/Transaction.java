@@ -50,8 +50,15 @@ public class Transaction {
     @Column(length = 500)
     private String review;
 
+    public void setReview(String review)
+    {
+        this.review = review;
+    }
 
+    public void setRating(@PositiveOrZero @Max(5) Integer rating)
+    {
+        this.rating = rating;
+    }
 
     // TBD in DB Layer: enforce that only one of foodId or foodRequestId can be non-null per transaction
-
 }

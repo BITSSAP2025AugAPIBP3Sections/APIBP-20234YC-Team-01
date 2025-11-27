@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: greengrub-deployment
+  labels:
+    app: greengrub
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: greengrub
+  template:
+    metadata:
+      labels:
+        app: greengrub
+    spec:
+      containers:
+        - name: greengrub
+          image: IMAGE_TAG
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          env:
+            - name: JAVA_OPTS
+              value: "-Xms256m -Xmx512m"
+---

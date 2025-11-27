@@ -1,12 +1,15 @@
 package com.example.GreenGrub.controllers;
 
 import com.example.GreenGrub.dto.*;
+import com.example.GreenGrub.entity.User;
 import com.example.GreenGrub.services.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.*;
 import io.swagger.v3.oas.annotations.media.*;
 import io.swagger.v3.oas.annotations.tags.Tag;
+
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -62,10 +67,10 @@ public class UserController {
     // ---------------------------------------------
     // 3️⃣ Profile Management
     // ---------------------------------------------
-    @Operation(summary = "Get user profile", description = "Fetches the profile details of a user")
+    @Operation(summary = "Get user profile", description = "Endpoints for manage and handle the details of a user,Access by [ADMIN,DONOR,RECIPIENT,DELIVERY]")
     @ApiResponse(responseCode = "200", description = "Profile retrieved successfully")
     @GetMapping("/{userId}/profile")
-    public ResponseEntity<UserProfile> getProfile(@PathVariable Long userId) {
+    public ResponseEntity<UserProfile> getProfile(@PathVariable String userId) {
         UserProfile profile = userService.getProfile(userId);
         return ResponseEntity.ok(profile);
     }
@@ -73,7 +78,7 @@ public class UserController {
     @Operation(summary = "Update user profile", description = "Updates profile details of a user")
     @ApiResponse(responseCode = "200", description = "Profile updated successfully")
     @PutMapping("/{userId}/profile")
-    public ResponseEntity<UserProfile> updateProfile(@PathVariable Long userId, @RequestBody UserProfile updatedProfile) {
+    public ResponseEntity<UserProfile> updateProfile(@PathVariable String userId, @RequestBody UserProfile updatedProfile) {
         UserProfile profile = userService.updateProfile(userId, updatedProfile);
         return ResponseEntity.ok(profile);
     }
@@ -85,7 +90,7 @@ public class UserController {
     @ApiResponse(responseCode = "200", description = "Organization details updated successfully")
     @PutMapping("/{userId}/organization")
     public ResponseEntity<OrganizationResponse> manageOrganization(
-            @PathVariable Long userId,
+            @PathVariable String userId,
             @RequestBody OrganizationRequest request) {
         OrganizationResponse response = userService.manageOrganization(userId, request);
         return ResponseEntity.ok(response);
@@ -98,7 +103,7 @@ public class UserController {
     @ApiResponse(responseCode = "200", description = "User verification completed")
     @PostMapping("/{userId}/verify")
     public ResponseEntity<VerificationResponse> verifyUser(
-            @PathVariable Long userId,
+            @PathVariable String userId,
             @RequestParam String roleType // DONOR / RECIPIENT
     ) {
         VerificationResponse response = userService.verifyUser(userId, roleType);
@@ -113,6 +118,16 @@ public class UserController {
     @PostMapping("/logout")
     public ResponseEntity<String> logout(@RequestHeader("Authorization") String token) {
         userService.logout(token);
-        return ResponseEntity.ok("Logout successful");
+        return ResponseEntity.ok("Logout Successful");
     }
-}
+
+    @Operation(summary = "List all users", description = "Fetch all registered users in the system")
+    @GetMapping("/list")
+    public ResponseEntity<List<User>> getAllUsers()
+    {
+        return ResponseEntity.ok(userService.getAllUsers());
+    }
+
+    @GetMapping("/ping")
+    public ResponseEntity<String> ping() {return ResponseEntity.ok("pong");}
+    }
