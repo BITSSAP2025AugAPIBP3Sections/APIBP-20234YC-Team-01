@@ -121,16 +121,16 @@ CREATE TABLE IF NOT EXISTS issues (
 
 -- Insert Users
 INSERT INTO users (id, name, email, password, phone_number, is_active, role, created_at, updated_at) VALUES
-('user-001', 'Rajesh Kumar', 'rajesh.kumar@example.com', '$2a$10$xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', '9876543210', true, 'DONOR', '2024-01-15 10:00:00', '2024-01-15 10:00:00'),
-('user-002', 'Priya Sharma', 'priya.sharma@example.com', '$2a$10$xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', '9876543211', true, 'RECIPIENT', '2024-01-16 11:00:00', '2024-01-16 11:00:00'),
-('user-003', 'Amit Patel', 'amit.patel@example.com', '$2a$10$xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', '9876543212', true, 'DONOR', '2024-01-17 12:00:00', '2024-01-17 12:00:00'),
-('user-004', 'Sneha Reddy', 'sneha.reddy@example.com', '$2a$10$xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', '9876543213', true, 'RECIPIENT', '2024-01-18 13:00:00', '2024-01-18 13:00:00'),
-('user-005', 'Vikram Singh', 'vikram.singh@example.com', '$2a$10$xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', '9876543214', true, 'ADMIN', '2024-01-19 14:00:00', '2024-01-19 14:00:00'),
-('user-006', 'Anita Desai', 'anita.desai@example.com', '$2a$10$xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', '9876543215', true, 'DONOR', '2024-01-20 15:00:00', '2024-01-20 15:00:00'),
-('user-007', 'Rahul Verma', 'rahul.verma@example.com', '$2a$10$xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', '9876543216', true, 'RECIPIENT', '2024-01-21 16:00:00', '2024-01-21 16:00:00'),
-('user-008', 'Kavita Nair', 'kavita.nair@example.com', '$2a$10$xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', '9876543217', true, 'DONOR', '2024-01-22 17:00:00', '2024-01-22 17:00:00'),
-('user-009', 'Suresh Gupta', 'suresh.gupta@example.com', '$2a$10$xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', '9876543218', true, 'RECIPIENT', '2024-01-23 18:00:00', '2024-01-23 18:00:00'),
-('user-010', 'Meera Iyer', 'meera.iyer@example.com', '$2a$10$xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', '9876543219', true, 'DONOR', '2024-01-24 19:00:00', '2024-01-24 19:00:00')
+('a1b2c3d4-e5f6-7890-abcd-ef1234567890', 'Rajesh Kumar', 'rajesh.kumar@example.com', '$2a$10$xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', '9876543210', true, 'DONOR', '2024-01-15 10:00:00', '2024-01-15 10:00:00'),
+('b2c3d4e5-f6a7-8901-bcde-f12345678901', 'Priya Sharma', 'priya.sharma@example.com', '$2a$10$xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', '9876543211', true, 'RECIPIENT', '2024-01-16 11:00:00', '2024-01-16 11:00:00'),
+('c3d4e5f6-a7b8-9012-cdef-123456789012', 'Amit Patel', 'amit.patel@example.com', '$2a$10$xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', '9876543212', true, 'DONOR', '2024-01-17 12:00:00', '2024-01-17 12:00:00'),
+('d4e5f6a7-b8c9-0123-def1-234567890123', 'Sneha Reddy', 'sneha.reddy@example.com', '$2a$10$xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', '9876543213', true, 'RECIPIENT', '2024-01-18 13:00:00', '2024-01-18 13:00:00'),
+('e5f6a7b8-c9d0-1234-ef12-345678901234', 'Vikram Singh', 'vikram.singh@example.com', '$2a$10$xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', '9876543214', true, 'ADMIN', '2024-01-19 14:00:00', '2024-01-19 14:00:00'),
+('f6a7b8c9-d0e1-2345-f123-456789012345', 'Anita Desai', 'anita.desai@example.com', '$2a$10$xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', '9876543215', true, 'DONOR', '2024-01-20 15:00:00', '2024-01-20 15:00:00'),
+('a7b8c9d0-e1f2-3456-1234-567890123456', 'Rahul Verma', 'rahul.verma@example.com', '$2a$10$xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', '9876543216', true, 'RECIPIENT', '2024-01-21 16:00:00', '2024-01-21 16:00:00'),
+('b8c9d0e1-f2a3-4567-2345-678901234567', 'Kavita Nair', 'kavita.nair@example.com', '$2a$10$xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', '9876543217', true, 'DONOR', '2024-01-22 17:00:00', '2024-01-22 17:00:00'),
+('c9d0e1f2-a3b4-5678-3456-789012345678', 'Suresh Gupta', 'suresh.gupta@example.com', '$2a$10$xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', '9876543218', true, 'RECIPIENT', '2024-01-23 18:00:00', '2024-01-23 18:00:00'),
+('d0e1f2a3-b4c5-6789-4567-890123456789', 'Meera Iyer', 'meera.iyer@example.com', '$2a$10$xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', '9876543219', true, 'DONOR', '2024-01-24 19:00:00', '2024-01-24 19:00:00')
 ON CONFLICT (id) DO NOTHING;
 
 -- Insert Addresses
@@ -174,13 +174,13 @@ ON CONFLICT (id) DO NOTHING;
 
 -- Insert Donations
 INSERT INTO donations (donation_id, quantity, requested, donor_id, recipient_id, website_url, pickup_address_id, delivery_address_id, status, created_at, updated_at) VALUES
-('don-001', 50, false, 'user-001', 'user-002', 'https://greengrub.org/don-001', 'addr-001', 'addr-002', 'COMPLETED', '2024-11-20 10:00:00', '2024-11-22 15:00:00'),
-('don-002', 30, true, 'user-003', 'user-004', 'https://greengrub.org/don-002', 'addr-003', 'addr-004', 'IN_TRANSIT', '2024-11-21 11:00:00', '2024-11-26 12:00:00'),
-('don-003', 40, false, 'user-006', NULL, 'https://greengrub.org/don-003', 'addr-006', NULL, 'PENDING', '2024-11-22 12:00:00', '2024-11-22 12:00:00'),
-('don-004', 25, true, 'user-008', 'user-009', 'https://greengrub.org/don-004', 'addr-008', 'addr-009', 'ACCEPTED', '2024-11-23 13:00:00', '2024-11-25 14:00:00'),
-('don-005', 60, false, 'user-010', 'user-007', 'https://greengrub.org/don-005', 'addr-010', 'addr-011', 'COMPLETED', '2024-11-24 14:00:00', '2024-11-26 16:00:00'),
-('don-006', 100, true, 'user-001', NULL, 'https://greengrub.org/don-006', 'addr-001', NULL, 'PENDING', '2024-11-25 15:00:00', '2024-11-25 15:00:00'),
-('don-007', 20, false, 'user-003', 'user-002', 'https://greengrub.org/don-007', 'addr-003', 'addr-007', 'IN_TRANSIT', '2024-11-26 08:00:00', '2024-11-26 18:00:00')
+('don-001', 50, false, 'a1b2c3d4-e5f6-7890-abcd-ef1234567890', 'b2c3d4e5-f6a7-8901-bcde-f12345678901', 'https://greengrub.org/don-001', 'addr-001', 'addr-002', 'COMPLETED', '2024-11-20 10:00:00', '2024-11-22 15:00:00'),
+('don-002', 30, true, 'c3d4e5f6-a7b8-9012-cdef-123456789012', 'd4e5f6a7-b8c9-0123-def1-234567890123', 'https://greengrub.org/don-002', 'addr-003', 'addr-004', 'IN_TRANSIT', '2024-11-21 11:00:00', '2024-11-26 12:00:00'),
+('don-003', 40, false, 'f6a7b8c9-d0e1-2345-f123-456789012345', NULL, 'https://greengrub.org/don-003', 'addr-006', NULL, 'PENDING', '2024-11-22 12:00:00', '2024-11-22 12:00:00'),
+('don-004', 25, true, 'b8c9d0e1-f2a3-4567-2345-678901234567', 'c9d0e1f2-a3b4-5678-3456-789012345678', 'https://greengrub.org/don-004', 'addr-008', 'addr-009', 'ACCEPTED', '2024-11-23 13:00:00', '2024-11-25 14:00:00'),
+('don-005', 60, false, 'd0e1f2a3-b4c5-6789-4567-890123456789', 'a7b8c9d0-e1f2-3456-1234-567890123456', 'https://greengrub.org/don-005', 'addr-010', 'addr-011', 'COMPLETED', '2024-11-24 14:00:00', '2024-11-26 16:00:00'),
+('don-006', 100, true, 'a1b2c3d4-e5f6-7890-abcd-ef1234567890', NULL, 'https://greengrub.org/don-006', 'addr-001', NULL, 'PENDING', '2024-11-25 15:00:00', '2024-11-25 15:00:00'),
+('don-007', 20, false, 'c3d4e5f6-a7b8-9012-cdef-123456789012', 'b2c3d4e5-f6a7-8901-bcde-f12345678901', 'https://greengrub.org/don-007', 'addr-003', 'addr-007', 'IN_TRANSIT', '2024-11-26 08:00:00', '2024-11-26 18:00:00')
 ON CONFLICT (donation_id) DO NOTHING;
 
 -- Insert Donation Foods (linking donations with food items)
@@ -199,11 +199,11 @@ ON CONFLICT (donation_id, food_id) DO NOTHING;
 
 -- Insert Pickup Requests
 INSERT INTO pickup_requests (id, donation_id, assigned_to, contact_name, contact_number, pickup_address_id, scheduled_time, status, remarks, created_at, updated_at) VALUES
-('pickup-001', 'don-001', 'user-005', 'Rajesh Kumar', '9876543210', 'addr-001', '2024-11-21 14:00:00', 'COMPLETED', 'Pickup successful', '2024-11-20 10:30:00', '2024-11-21 15:00:00'),
-('pickup-002', 'don-002', 'user-005', 'Amit Patel', '9876543212', 'addr-003', '2024-11-27 10:00:00', 'SCHEDULED', 'Scheduled for tomorrow morning', '2024-11-21 11:30:00', '2024-11-26 09:00:00'),
+('pickup-001', 'don-001', 'e5f6a7b8-c9d0-1234-ef12-345678901234', 'Rajesh Kumar', '9876543210', 'addr-001', '2024-11-21 14:00:00', 'COMPLETED', 'Pickup successful', '2024-11-20 10:30:00', '2024-11-21 15:00:00'),
+('pickup-002', 'don-002', 'e5f6a7b8-c9d0-1234-ef12-345678901234', 'Amit Patel', '9876543212', 'addr-003', '2024-11-27 10:00:00', 'SCHEDULED', 'Scheduled for tomorrow morning', '2024-11-21 11:30:00', '2024-11-26 09:00:00'),
 ('pickup-003', 'don-003', NULL, 'Anita Desai', '9876543215', 'addr-006', '2024-11-28 11:00:00', 'PENDING', 'Awaiting assignment', '2024-11-22 12:30:00', '2024-11-22 12:30:00'),
-('pickup-004', 'don-004', 'user-005', 'Kavita Nair', '9876543217', 'addr-008', '2024-11-26 09:00:00', 'IN_PROGRESS', 'Driver en route', '2024-11-23 13:30:00', '2024-11-26 08:30:00'),
-('pickup-005', 'don-005', 'user-005', 'Meera Iyer', '9876543219', 'addr-010', '2024-11-25 16:00:00', 'COMPLETED', 'Successfully delivered', '2024-11-24 14:30:00', '2024-11-25 17:00:00')
+('pickup-004', 'don-004', 'e5f6a7b8-c9d0-1234-ef12-345678901234', 'Kavita Nair', '9876543217', 'addr-008', '2024-11-26 09:00:00', 'IN_PROGRESS', 'Driver en route', '2024-11-23 13:30:00', '2024-11-26 08:30:00'),
+('pickup-005', 'don-005', 'e5f6a7b8-c9d0-1234-ef12-345678901234', 'Meera Iyer', '9876543219', 'addr-010', '2024-11-25 16:00:00', 'COMPLETED', 'Successfully delivered', '2024-11-24 14:30:00', '2024-11-25 17:00:00')
 ON CONFLICT (id) DO NOTHING;
 
 -- Insert Transactions
