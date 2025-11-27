@@ -6,6 +6,8 @@ import com.example.GreenGrub.dto.UserProfile;
 import com.example.GreenGrub.entity.Donation;
 import com.example.GreenGrub.enumeration.DonationStatus;
 import com.example.GreenGrub.repositories.DonationRepository;
+import com.example.GreenGrub.repositories.UserRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,9 @@ public class DonationService {
 
     @Autowired
     private DonationRepository donationRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     /**
      * Generate a simple report DTO for a donor (if userId provided) or for all donations (if userId is null/empty).
@@ -76,8 +81,11 @@ public class DonationService {
         java.util.function.Function<String, String> safeContact = (idStr) -> {
             if (idStr == null || idStr.trim().isEmpty()) return "Unavailable";
             try {
-                long id = Long.parseLong(idStr);
-                String contact = UserProfile.getContact(id);
+                final var user= userRepository.findById(idStr).orElse(null);
+                String contact = "";
+                if(user!=null){
+                    contact = user.getPhoneNumber();
+                }
                 return (contact == null || contact.trim().isEmpty()) ? "Unavailable" : contact;
             } catch (Exception ex) {
                 return "Unavailable";
