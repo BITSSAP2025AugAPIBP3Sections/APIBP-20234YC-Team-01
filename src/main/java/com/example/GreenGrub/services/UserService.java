@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -71,27 +72,79 @@ public class UserService {
             .build();        
     }
 
-    public UserProfile getProfile(Long userId) {
-        // TODO Auto-generated method stub
-        return null;
+    public UserProfile getProfile(String userId) {
+        final var user = userRepository.findById(userId);
+        if(!user.isPresent()){
+            return UserProfile.builder()
+                .name("User does not exist")
+                .userId(userId)
+                .build();
+        }
+        UserProfile profile = new UserProfile();
+        User u = user.get();
+        profile.setUserId(userId);
+        Optional.of(u.getName()).ifPresent(item -> profile.setName(item));
+        Optional.of(u.getPhoneNumber()).ifPresent(item -> profile.setPhoneNumber(item));
+        userRepository.save(u);
+        return profile;
         
     }
 
-    public UserProfile updateProfile(Long userId, UserProfile updatedProfile) {
-        // TODO Auto-generated method stub
-        return null;
+    public UserProfile updateProfile(String userId, UserProfile updatedProfile) {
+        final var user = userRepository.findById(userId);
+        if(!user.isPresent()){
+            return UserProfile.builder()
+                .name("User does not exist")
+                .userId(userId)
+                .build();
+        }
+        User u = user.get();
+        Optional.of(updatedProfile.getName()).ifPresent(item -> u.setName(item));
+        Optional.of(updatedProfile.getPhoneNumber()).ifPresent(item -> u.setPhoneNumber(item));
+        userRepository.save(u);
+        return updatedProfile;
+    }
+
+    public OrganizationResponse manageOrganization(String userId, OrganizationRequest request) {
+        
+        return OrganizationResponse.builder()
+                .orgName(request.getOrgName())
+                .verifiedStatus("verified")
+                .build()
+        ;
         
     }
 
-    public OrganizationResponse manageOrganization(Long userId, OrganizationRequest request) {
-        // TODO Auto-generated method stub
-        return null;
-        
-    }
+    public VerificationResponse verifyUser(String userId, String roleType) {
+        VerificationResponse response = new VerificationResponse();
+        final var userOptional =userRepository.findById(userId);
+        if (userOptional.isPresent()) {
+            Optional
+            .ofNullable(roleType)
+            .ifPresentOrElse( role -> {
+                if(userOptional.get().getRole().name().equalsIgnoreCase(roleType)){
 
-    public VerificationResponse verifyUser(Long userId, String roleType) {
-        // TODO Auto-generated method stub
-        return null;
+                    response.setMessage("User with ID : "+userId+" is a valid "+roleType);
+                    response.setUserId(userId);
+                    response.setVerified(true);
+                } else{
+                    response.setMessage("User with ID : "+userId+" is a valid user");
+                    response.setUserId(userId);
+                    response.setVerified(true);
+                }
+            }, () -> {
+                response.setMessage("User with ID : "+userId+" is a valid user");
+                response.setUserId(userId);
+                response.setVerified(true);
+            });
+            
+            
+        }else {
+            response.setMessage("User with ID : "+userId+" is a invalid user");
+            response.setUserId(userId);
+            response.setVerified(false);
+        }
+        return response;
     }
 
     public void logout(String token) {

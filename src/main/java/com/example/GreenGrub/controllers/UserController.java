@@ -70,7 +70,7 @@ public class UserController {
     @Operation(summary = "Get user profile", description = "Endpoints for manage and handle the details of a user,Access by [ADMIN,DONOR,RECIPIENT,DELIVERY]")
     @ApiResponse(responseCode = "200", description = "Profile retrieved successfully")
     @GetMapping("/{userId}/profile")
-    public ResponseEntity<UserProfile> getProfile(@PathVariable Long userId) {
+    public ResponseEntity<UserProfile> getProfile(@PathVariable String userId) {
         UserProfile profile = userService.getProfile(userId);
         return ResponseEntity.ok(profile);
     }
@@ -78,7 +78,7 @@ public class UserController {
     @Operation(summary = "Update user profile", description = "Updates profile details of a user")
     @ApiResponse(responseCode = "200", description = "Profile updated successfully")
     @PutMapping("/{userId}/profile")
-    public ResponseEntity<UserProfile> updateProfile(@PathVariable Long userId, @RequestBody UserProfile updatedProfile) {
+    public ResponseEntity<UserProfile> updateProfile(@PathVariable String userId, @RequestBody UserProfile updatedProfile) {
         UserProfile profile = userService.updateProfile(userId, updatedProfile);
         return ResponseEntity.ok(profile);
     }
@@ -90,7 +90,7 @@ public class UserController {
     @ApiResponse(responseCode = "200", description = "Organization details updated successfully")
     @PutMapping("/{userId}/organization")
     public ResponseEntity<OrganizationResponse> manageOrganization(
-            @PathVariable Long userId,
+            @PathVariable String userId,
             @RequestBody OrganizationRequest request) {
         OrganizationResponse response = userService.manageOrganization(userId, request);
         return ResponseEntity.ok(response);
@@ -103,7 +103,7 @@ public class UserController {
     @ApiResponse(responseCode = "200", description = "User verification completed")
     @PostMapping("/{userId}/verify")
     public ResponseEntity<VerificationResponse> verifyUser(
-            @PathVariable Long userId,
+            @PathVariable String userId,
             @RequestParam String roleType // DONOR / RECIPIENT
     ) {
         VerificationResponse response = userService.verifyUser(userId, roleType);
@@ -127,4 +127,7 @@ public class UserController {
     {
         return ResponseEntity.ok(userService.getAllUsers());
     }
+
+    @GetMapping("/ping")
+    public ResponseEntity<String> ping() {return ResponseEntity.ok("pong");}
     }

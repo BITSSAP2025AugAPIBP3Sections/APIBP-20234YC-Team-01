@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: greengrub
-          image: greengrub:latest
+          image: IMAGE_TAG
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
