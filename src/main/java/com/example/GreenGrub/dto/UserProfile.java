@@ -11,13 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserProfile {
-    private Long userId;
+    private String userId;
     private String name;
-    private static String contact;
-    private String address;
-    private String profileImage;
-    public static String getContact(Long userId)
-    {
-        return contact;
-    }
+    private String phoneNumber;
 }
