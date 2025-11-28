@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Collections;
@@ -202,5 +203,66 @@ public class DonationService {
     public List<Donation> getDonationHistory(String userId) {
         if (userId == null) return Collections.emptyList();
         return donationRepository.findByDonorId(userId);
+    }
+
+    public Donation createDonation(Donation donation) {
+        // set timestamps or defaults if needed
+        if (donation.getCreatedAt() == null) {
+            donation.setCreatedAt(LocalDateTime.now());
+        }
+        donation.setUpdatedAt(LocalDateTime.now());
+        return donationRepository.save(donation);
+    }
+
+    public Optional<Donation> getDonationById(String donationId) {
+        return donationRepository.findById(donationId);
+    }
+
+    public List<Donation> listDonations(String donorId, String recipientId, String status) {
+        List<Donation> all = donationRepository.findAll();
+
+        return all.stream()
+            .filter(d -> donorId == null || donorId.equals(d.getDonorId()))
+            .filter(d -> recipientId == null || recipientId.equals(d.getRecipientId()))
+            .filter(d -> status == null || status.equalsIgnoreCase(d.getStatus().name()))
+            .toList();
+    }
+
+    public Optional<Donation> updateDonation(String donationId, Donation request) {
+        return donationRepository.findById(donationId)
+            .map(existing -> {
+
+                // only update if not null
+                if (request.getStatus() != null) {
+                    existing.setStatus(request.getStatus());
+                }
+                if (request.getQuantity() != null) {
+                    existing.setQuantity(request.getQuantity());
+                }
+                if (request.getRecipientId() != null) {
+                    existing.setRecipientId(request.getRecipientId());
+                }
+                if (request.getWebsiteUrl() != null) {
+                    existing.setWebsiteUrl(request.getWebsiteUrl());
+                }
+                if (request.getPickupAddress() != null) {
+                    existing.setPickupAddress(request.getPickupAddress());
+                }
+                if (request.getDeliveryAddress() != null) {
+                    existing.setDeliveryAddress(request.getDeliveryAddress());
+                }
+
+                existing.setUpdatedAt(LocalDateTime.now());
+
+                return donationRepository.save(existing);
+            });
+    }
+
+    public boolean deleteDonation(String donationId) {
+        if (!donationRepository.existsById(donationId)) {
+            return false;
+        }
+        donationRepository.deleteById(donationId);
+        return true;
     }
 }
