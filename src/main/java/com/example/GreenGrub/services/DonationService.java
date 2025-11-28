@@ -78,7 +78,6 @@ public class DonationService {
         String senderId = message.getSenderId();
         String msg = message.getMessage() == null ? "" : message.getMessage().trim().toUpperCase();
 
-        // Safe contact lookup
         java.util.function.Function<String, String> safeContact = (idStr) -> {
             if (idStr == null || idStr.trim().isEmpty()) return "Unavailable";
             try {
@@ -112,7 +111,6 @@ public class DonationService {
                 + "Recipient Phone: " + recipientContact;
         }
 
-        // CASE 1: Donation is accepted and contact should be exchanged
         boolean acceptedAndAssigned =
             donation.getStatus() == DonationStatus.ACCEPTED &&
                 hasRecipient;
@@ -133,7 +131,6 @@ public class DonationService {
             return "Contact details have been exchanged between the donor and the recipient.";
         }
 
-        // CASE 2: Donation not available
         boolean available = donation.getQuantity() != null
             && donation.getQuantity() > 0
             && donation.getStatus() != DonationStatus.CANCELLED;
@@ -142,12 +139,10 @@ public class DonationService {
             return "This donation is not available. It may be cancelled or no food may be remaining.";
         }
 
-        // CASE 3: Sender is donor checking before approval (but didn't send APPROVE)
         if (isDonor) {
             return "You are the donor. The recipient's contact will be shared once you approve their request.";
         }
 
-        // CASE 4: Sender is recipient, but donation not yet approved
         String donorContact = safeContact.apply(donorId);
         String masked = maskContact(donorContact);
 
@@ -172,15 +167,12 @@ public class DonationService {
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try (OutputStreamWriter writer = new OutputStreamWriter(baos, StandardCharsets.UTF_8)) {
-            // header matching DonationReportDTO fields
             writer.write("organizationId,totalDonations,totalFoodDonated\n");
 
             String org = report.getOrganizationId() == null ? "" : report.getOrganizationId();
             String totalDon = String.valueOf(report.getTotalDonations());
-            // ensure decimal uses dot and has no grouping
             String totalFood = String.format(Locale.ROOT, "%.2f", report.getTotalFoodDonated());
 
-            // safe CSV values (no fancy escaping needed for these fields but keep helper for future-proof)
             writer.write(String.format("%s,%s,%s\n", safeCsv(org), safeCsv(totalDon), safeCsv(totalFood)));
             writer.flush();
         }
@@ -206,7 +198,6 @@ public class DonationService {
     }
 
     public Donation createDonation(Donation donation) {
-        // set timestamps or defaults if needed
         if (donation.getCreatedAt() == null) {
             donation.setCreatedAt(LocalDateTime.now());
         }
@@ -232,7 +223,6 @@ public class DonationService {
         return donationRepository.findById(donationId)
             .map(existing -> {
 
-                // only update if not null
                 if (request.getStatus() != null) {
                     existing.setStatus(request.getStatus());
                 }
