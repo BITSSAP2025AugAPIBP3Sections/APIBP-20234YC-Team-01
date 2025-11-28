@@ -28,9 +28,10 @@ public class DonationController {
     @Autowired
     private DonationService donationService;
 
-    // ---------------------------------------------------------
-    // 1. Fetch summary report of donations (optionally by user)
-    // ---------------------------------------------------------
+    /**
+     * Generate donation report (optionally filtered by user)
+     * If No userID is provided, returns a summary of all donations
+     */
     @GetMapping("/report")
     @Operation(
         summary = "Fetch Donation Report",
@@ -53,9 +54,9 @@ public class DonationController {
         return ResponseEntity.ok(report);
     }
 
-    // --------------------------------------------------------------
-    // 2. Download donation report as CSV (optionally filtered by user)
-    // --------------------------------------------------------------
+    /**
+     * Download donation report as CSV (optionally filtered by user)
+    **/
     @GetMapping(value = "/report/download", produces = "text/csv")
     @Operation(
         summary = "Download Donation Report (CSV)",
@@ -90,9 +91,10 @@ public class DonationController {
             .body(resource);
     }
 
-    // ---------------------------------------------------
-    // 3. Share contacts between donor and recipient
-    // ---------------------------------------------------
+    /**
+     * Allows donor or recipient to exchange contact details based on donation status.
+     * This returns a clear message explaining what contact information is shared.
+     */
     @PostMapping("/contact")
     @Operation(
         summary = "Contact Donor or Recipient",
@@ -108,9 +110,9 @@ public class DonationController {
         return ResponseEntity.ok(body);
     }
 
-    // ---------------------------------------------------
-    // 4. Fetch full donation history for a donor
-    // ---------------------------------------------------
+    /**
+     * Fetch full donation history for a donor.
+     */
     @GetMapping("/history/{userId}")
     @Operation(
         summary = "Fetch Donation History",
@@ -133,9 +135,9 @@ public class DonationController {
         return ResponseEntity.ok(history);
     }
 
-    // ---------------------------------------------------
-    // 5. Create donation
-    // ---------------------------------------------------
+    /**
+     * Create a new donation entry
+     */
     @PostMapping
     @Operation(
         summary = "Create a new donation",
@@ -157,9 +159,9 @@ public class DonationController {
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
-    // ---------------------------------------------------
-    // 6. Get donation by ID
-    // ---------------------------------------------------
+    /**
+     * Get donation by ID
+     */
     @GetMapping("/{donationId}")
     @Operation(
         summary = "Get donation details",
@@ -180,9 +182,9 @@ public class DonationController {
             );
     }
 
-    // ---------------------------------------------------
-    // 7. List donations with filters
-    // ---------------------------------------------------
+    /**
+     * List donations with optional filters
+     */
     @GetMapping
     @Operation(
         summary = "List donations",
@@ -214,9 +216,9 @@ public class DonationController {
         return ResponseEntity.ok(donations);
     }
 
-    // ---------------------------------------------------
-    // 8. Update donation
-    // ---------------------------------------------------
+    /**
+     * Update an existing donation
+     */
     @PutMapping("/{donationId}")
     @Operation(
         summary = "Update donation",
@@ -240,9 +242,9 @@ public class DonationController {
             );
     }
 
-    // ---------------------------------------------------
-    // 9. Delete / Cancel Donation
-    // ---------------------------------------------------
+    /**
+     * Delete a donation by ID
+     */
     @DeleteMapping("/{donationId}")
     @Operation(
         summary = "Delete Donation",
