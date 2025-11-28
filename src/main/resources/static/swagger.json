@@ -368,7 +368,7 @@
       "get": {
         "tags": ["Food Management"],
         "summary": "Browse Available Food",
-        "description": "Allows users to browse available food listings.",
+        "description": "Allows recipients to browse available food listings.",
         "operationId": "browseAvailableFood",
         "responses": {
           "200": {
@@ -422,7 +422,7 @@
       "get": {
         "tags": ["Food Management"],
         "summary": "Filter Food",
-        "description": "Allows users to filter food listings by category, expiry date, and location.",
+        "description": "Allows donors or recipient to filter food listings by category, expiry date, and location.",
         "operationId": "filterFood",
         "parameters": [
           {
@@ -503,7 +503,7 @@
       "post": {
         "tags": ["Food Management"],
         "summary": "Report Food Issue (for Food Request)",
-        "description": "Allows users to report issues with a food request.",
+        "description": "Allows donors or recipients to report issues with a food request.",
         "operationId": "reportFoodIssueForFoodRequest",
         "parameters": [
           {
@@ -544,7 +544,7 @@
       "post": {
         "tags": ["Food Management"],
         "summary": "Report Food Issue (for Excess Food Post)",
-        "description": "Allows users to report issues with food items.",
+        "description": "Allows donors or recipients to report issues with food items.",
         "operationId": "reportFoodIssueForExcessFoodPost",
         "parameters": [
           {
@@ -585,52 +585,11 @@
       "post": {
         "tags": ["Food Management"],
         "summary": "Rate and Review Transaction for Food Request",
-        "description": "Allows users to rate and review transactions (request-based).",
+        "description": "Allows recipients to rate and review transactions (request-based).",
         "operationId": "rateReviewTransactionForFoodRequest",
         "parameters": [
           {
             "name": "foodRequestId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TransactionReviewDTO"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Review submitted successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-
-    "/api/v1/food/{foodId}/rateReviewTransaction": {
-      "post": {
-        "tags": ["Food Management"],
-        "summary": "Rate and Review Transaction for excess Food Post",
-        "description": "Allows users to rate and review transactions (excess food posts).",
-        "operationId": "rateReviewTransactionForExcessFoodPost",
-        "parameters": [
-          {
-            "name": "foodId",
             "in": "path",
             "required": true,
             "schema": {
