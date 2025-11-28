@@ -33,9 +33,11 @@ public class FoodController {
         this.foodService = foodService;
     }
 
-    // ---------------------------
-    // 1) Post Excess Food (DONOR)
-    // ---------------------------
+    /**
+     * Post Excess Food (DONOR)
+     * @param food
+     * @return
+     */
     @PostMapping("/postExcessFood")
     @Operation(summary = "Post Excess Food", description = "Allows donors to post excess food.")
     public ResponseEntity<Food> postExcessFood(@RequestBody Food food) {
@@ -48,9 +50,9 @@ public class FoodController {
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
-    // ---------------------------------
-    // 2) Browse Available Food (GENERIC)
-    // ---------------------------------
+    /**
+     * Browse Available Food (RECIPIENT)
+     */
     @GetMapping("/browseAvailableFood")
     @Operation(summary = "Browse Available Food", description = "Allows users to browse available food listings.")
     public ResponseEntity<List<Food>> browseAvailableFood() {
@@ -63,6 +65,11 @@ public class FoodController {
         return ResponseEntity.ok(availableFoodList);
     }
 
+    /**
+     * Request Food (RECIPIENT)
+     * @param foodRequest
+     * @return
+     */
     @PostMapping("/requestFood")
     @Operation(summary = "Request Food", description = "Allows recipients to request food from available listings.")
     public ResponseEntity<FoodRequest> requestFood(@RequestBody FoodRequest foodRequest) {
@@ -82,7 +89,9 @@ public class FoodController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
-
+    /**
+     * Browse Food Requests (DONOR)
+     */
     @GetMapping("/browseFoodRequests")
     @Operation(summary = "Browse Food Requests", description = "Allows donors to browse active food requests.")
     public ResponseEntity<List<FoodRequest>> browseFoodRequests() {
@@ -94,6 +103,9 @@ public class FoodController {
         return ResponseEntity.ok(requests);
     }
 
+    /**
+     * Filter Food (in-memory)
+     */
     @GetMapping("/filterFood")
     @Operation(
         summary = "Filter Food (in-memory)",
