@@ -80,23 +80,4 @@ public class Donation {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public String getDonorId()
-    {
-        return donorId;
-    }
-
-    public String getRecipientId()
-    {
-        return recipientId;
-    }
-
-    public DonationStatus getStatus()
-    {
-        return status;
-    }
-
 }
