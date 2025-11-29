@@ -8,7 +8,10 @@ import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -16,6 +19,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Data
 @Builder
+@Getter
+@Setter
 @Table(name = "food_requests")
 @Schema(description = "Represents a food request")
 
@@ -38,7 +43,7 @@ public class FoodRequest {
     private Integer quantityRequested;
 
     @NotNull(message = "Quantity Unit cannot be null")
-    @Column(name = "unit_type",nullable = false)
+    @Column(name = "unit_type", nullable = false)
     @Schema(description = "Unit type for the quantity", example = "KILOGRAMS, SERVINGS")
     private UnitType unitType;
 

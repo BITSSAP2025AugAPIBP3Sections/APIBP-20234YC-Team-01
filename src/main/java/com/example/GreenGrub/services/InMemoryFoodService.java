@@ -1,6 +1,7 @@
 package com.example.GreenGrub.services;
 
 import com.example.GreenGrub.entity.Food;
+import com.example.GreenGrub.entity.FoodRequest;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
@@ -14,16 +15,17 @@ import java.util.stream.Collectors;
 public class InMemoryFoodService {
 
     private final Map<String, Food> foodStore = new ConcurrentHashMap<>();
+    private final Map<String, FoodRequest> foodRequestStore = new ConcurrentHashMap<>();
 
     public Food postExcessFood(Food food) {
         // Generate ID if not provided
         if (food.getId() == null || food.getId().isBlank()) {
-            food.setId(UUID.randomUUID().toString());
+            food.setId("FOOD-" + UUID.randomUUID());
         }
-        // Set defaults
-        food.setCreatedAt(LocalDateTime.now());
-        food.setAvailable(true);  // uses Lombok @Data -> setter is setAvailable
-        // Store
+        if (food.getCreatedAt() == null) {
+            food.setCreatedAt(LocalDateTime.now());
+        }
+        food.setAvailable(true);
         foodStore.put(food.getId(), food);
         return food;
     }
@@ -32,7 +34,6 @@ public class InMemoryFoodService {
         LocalDateTime now = LocalDateTime.now();
         return foodStore.values().stream()
             .filter(Food::isAvailable)
-            .filter(f -> f.getExpiresAt() == null || f.getExpiresAt().isAfter(now))
             .collect(Collectors.toList());
     }
 
@@ -46,4 +47,39 @@ public class InMemoryFoodService {
             f.setAvailable(false);
         }
     }
+
+    public FoodRequest requestFood(FoodRequest request) {
+        if (request.getFoodRequestId() == null || request.getFoodRequestId().isBlank()) {
+            request.setFoodRequestId("REQ-" + UUID.randomUUID());
+        }
+        if (request.getRequireOn() == null) {
+            request.setRequireOn(LocalDateTime.now().plusHours(2));
+        }
+
+        foodRequestStore.put(request.getFoodRequestId(), request);
+        return request;
+    }
+
+    public List<FoodRequest> getFoodRequests() {
+        return new ArrayList<>(foodRequestStore.values());
+    }
+
+    public List<Food> filterFood(String category,
+                                 LocalDateTime expiryAfter,
+                                 String location) {
+        return foodStore.values().stream()
+            .filter(Food::isAvailable)
+            .filter(f -> {
+                if (category == null) return true;
+                // case-insensitive compare – enum name or string field
+                return f.getFoodType() != null
+                    && f.getFoodType().name().equalsIgnoreCase(category);
+            })
+            .filter(f -> {
+                if (expiryAfter == null || f.getExpiresAt() == null) return true;
+                return f.getExpiresAt().isAfter(expiryAfter);
+            })
+            .toList();
+    }
+
 }

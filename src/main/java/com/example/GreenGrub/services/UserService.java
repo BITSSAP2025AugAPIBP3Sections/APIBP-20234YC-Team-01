@@ -9,6 +9,8 @@ import com.example.GreenGrub.dto.UserRegistrationRequest;
 import com.example.GreenGrub.dto.UserResponse;
 import com.example.GreenGrub.dto.VerificationResponse;
 import com.example.GreenGrub.entity.User;
+import com.example.GreenGrub.exception.base.AppException;
+import com.example.GreenGrub.exception.errorResponse.ErrorDescription;
 import com.example.GreenGrub.repositories.UserRepository;
 
 import lombok.AllArgsConstructor;
@@ -34,7 +36,21 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
 
     public UserResponse registerUser(UserRegistrationRequest request) {
-        
+
+        userRepository.findByEmail(request.getEmail())
+            .ifPresent(existingUser -> {
+                throw new AppException(
+                    new ErrorDescription(
+                        "409",
+                        "User with this email already exists",
+                        List.of(new String[]{
+                            "Use a different email address",
+                            "If this is your account, please login instead"
+                        })
+                    )
+                );
+            });
+
         User user = User.builder()
                 .name(request.getName())
                 .email(request.getEmail())
@@ -53,7 +69,7 @@ public class UserService {
             .role(createdUser.getRole())
             .userId(createdUser.getId())
             .build();
-        
+
     }
 
     public LoginResponse login(LoginRequest request) {

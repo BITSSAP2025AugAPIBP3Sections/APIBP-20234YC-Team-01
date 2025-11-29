@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Collections;
@@ -77,7 +78,6 @@ public class DonationService {
         String senderId = message.getSenderId();
         String msg = message.getMessage() == null ? "" : message.getMessage().trim().toUpperCase();
 
-        // Safe contact lookup
         java.util.function.Function<String, String> safeContact = (idStr) -> {
             if (idStr == null || idStr.trim().isEmpty()) return "Unavailable";
             try {
@@ -111,7 +111,6 @@ public class DonationService {
                 + "Recipient Phone: " + recipientContact;
         }
 
-        // CASE 1: Donation is accepted and contact should be exchanged
         boolean acceptedAndAssigned =
             donation.getStatus() == DonationStatus.ACCEPTED &&
                 hasRecipient;
@@ -132,7 +131,6 @@ public class DonationService {
             return "Contact details have been exchanged between the donor and the recipient.";
         }
 
-        // CASE 2: Donation not available
         boolean available = donation.getQuantity() != null
             && donation.getQuantity() > 0
             && donation.getStatus() != DonationStatus.CANCELLED;
@@ -141,12 +139,10 @@ public class DonationService {
             return "This donation is not available. It may be cancelled or no food may be remaining.";
         }
 
-        // CASE 3: Sender is donor checking before approval (but didn't send APPROVE)
         if (isDonor) {
             return "You are the donor. The recipient's contact will be shared once you approve their request.";
         }
 
-        // CASE 4: Sender is recipient, but donation not yet approved
         String donorContact = safeContact.apply(donorId);
         String masked = maskContact(donorContact);
 
@@ -171,15 +167,12 @@ public class DonationService {
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try (OutputStreamWriter writer = new OutputStreamWriter(baos, StandardCharsets.UTF_8)) {
-            // header matching DonationReportDTO fields
             writer.write("organizationId,totalDonations,totalFoodDonated\n");
 
             String org = report.getOrganizationId() == null ? "" : report.getOrganizationId();
             String totalDon = String.valueOf(report.getTotalDonations());
-            // ensure decimal uses dot and has no grouping
             String totalFood = String.format(Locale.ROOT, "%.2f", report.getTotalFoodDonated());
 
-            // safe CSV values (no fancy escaping needed for these fields but keep helper for future-proof)
             writer.write(String.format("%s,%s,%s\n", safeCsv(org), safeCsv(totalDon), safeCsv(totalFood)));
             writer.flush();
         }
@@ -202,5 +195,64 @@ public class DonationService {
     public List<Donation> getDonationHistory(String userId) {
         if (userId == null) return Collections.emptyList();
         return donationRepository.findByDonorId(userId);
+    }
+
+    public Donation createDonation(Donation donation) {
+        if (donation.getCreatedAt() == null) {
+            donation.setCreatedAt(LocalDateTime.now());
+        }
+        donation.setUpdatedAt(LocalDateTime.now());
+        return donationRepository.save(donation);
+    }
+
+    public Optional<Donation> getDonationById(String donationId) {
+        return donationRepository.findById(donationId);
+    }
+
+    public List<Donation> listDonations(String donorId, String recipientId, String status) {
+        List<Donation> all = donationRepository.findAll();
+
+        return all.stream()
+            .filter(d -> donorId == null || donorId.equals(d.getDonorId()))
+            .filter(d -> recipientId == null || recipientId.equals(d.getRecipientId()))
+            .filter(d -> status == null || status.equalsIgnoreCase(d.getStatus().name()))
+            .toList();
+    }
+
+    public Optional<Donation> updateDonation(String donationId, Donation request) {
+        return donationRepository.findById(donationId)
+            .map(existing -> {
+
+                if (request.getStatus() != null) {
+                    existing.setStatus(request.getStatus());
+                }
+                if (request.getQuantity() != null) {
+                    existing.setQuantity(request.getQuantity());
+                }
+                if (request.getRecipientId() != null) {
+                    existing.setRecipientId(request.getRecipientId());
+                }
+                if (request.getWebsiteUrl() != null) {
+                    existing.setWebsiteUrl(request.getWebsiteUrl());
+                }
+                if (request.getPickupAddress() != null) {
+                    existing.setPickupAddress(request.getPickupAddress());
+                }
+                if (request.getDeliveryAddress() != null) {
+                    existing.setDeliveryAddress(request.getDeliveryAddress());
+                }
+
+                existing.setUpdatedAt(LocalDateTime.now());
+
+                return donationRepository.save(existing);
+            });
+    }
+
+    public boolean deleteDonation(String donationId) {
+        if (!donationRepository.existsById(donationId)) {
+            return false;
+        }
+        donationRepository.deleteById(donationId);
+        return true;
     }
 }
