@@ -1,0 +1,90 @@
+enum UserRole {
+    DONOR
+    RECIPIENT
+    ADMIN
+}
+
+type User {
+    id: ID!
+    name: String!
+    email: String!
+    phoneNumber: String
+    isActive: Boolean!
+    role: UserRole!
+    createdAt: String
+    updatedAt: String
+}
+
+type UserResponse {
+    userId: ID!
+    name: String!
+    email: String!
+    role: UserRole!
+}
+
+type UserProfile {
+    userId: ID!
+    name: String!
+    phoneNumber: String
+}
+
+type LoginResponse {
+    token: String!
+}
+
+type OrganizationResponse {
+    orgId: ID!
+    orgName: String!
+    verifiedStatus: String
+}
+
+type VerificationResponse {
+    userId: ID!
+    verified: Boolean!
+    message: String
+}
+
+input UserRegistrationRequest {
+    name: String!
+    email: String!
+    password: String!
+    role: UserRole!
+    phoneNumber: String
+}
+
+input LoginRequest {
+    email: String!
+    password: String!
+}
+
+input OrganizationRequest {
+    orgName: String!
+    registrationNumber: String
+    address: String
+}
+
+input UserProfileInput {
+    name: String
+    phoneNumber: String
+}
+
+
+# Queries
+
+type Query {
+    getUserProfile(userId: ID!): UserProfile
+    listAllUsers: [User!]!
+    ping: String
+}
+
+# Mutations
+
+type Mutation {
+    registerUser(request: UserRegistrationRequest!): UserResponse!
+    login(request: LoginRequest!): LoginResponse!
+    updateUserProfile(userId: ID!, profile: UserProfileInput!): UserProfile!
+    manageOrganization(userId: ID!, request: OrganizationRequest!): OrganizationResponse!
+    verifyUser(userId: ID!, roleType: UserRole!): VerificationResponse!
+    logout(token: String!): String!
+}
+

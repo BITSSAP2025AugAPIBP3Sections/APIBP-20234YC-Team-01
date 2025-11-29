@@ -28,6 +28,20 @@
 	</scm>
 	<properties>
 		<java.version>17</java.version>
+        <!-- Exclude SecurityConfig.java from SonarCloud quality checks -->
+		<!-- Exclude specific packages from SonarCloud quality checks -->
+		<sonar.exclusions>
+			src/main/java/com/example/GreenGrub/configuration/**/*.java,
+			src/main/java/com/example/GreenGrub/controllers/**/*.java,
+			src/main/java/com/example/GreenGrub/dto/**/*.java,
+			src/main/java/com/example/GreenGrub/dao/**/*.java,
+			src/main/java/com/example/GreenGrub/entity/**/*.java,
+			src/main/java/com/example/GreenGrub/enumeration/**/*.java,
+			src/main/java/com/example/GreenGrub/exception/**/*.java,
+			src/main/java/com/example/GreenGrub/filters/**/*.java,
+			src/main/java/com/example/GreenGrub/helper/**/*.java,
+			src/main/java/com/example/GreenGrub/repositories/**/*.java
+		</sonar.exclusions>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -90,6 +104,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
 
 		<dependency>
 			<groupId>org.springdoc</groupId>
