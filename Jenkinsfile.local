@@ -30,6 +30,7 @@ pipeline {
                         mvn -B sonar:sonar \
                           -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
                           -Dsonar.host.url=$SONAR_HOST_URL \
+                          -Dsonar.branch.name=dev
                           -Dsonar.login=$SONAR_AUTH_TOKEN
                     """
                 }
