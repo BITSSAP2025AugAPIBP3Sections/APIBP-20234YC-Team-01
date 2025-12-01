@@ -3,8 +3,10 @@ package com.example.GreenGrub.controllers;
 import com.example.GreenGrub.entity.FoodRequest;
 import com.example.GreenGrub.entity.Transaction;
 import com.example.GreenGrub.entity.Food;
-import com.example.GreenGrub.repositories.TransactionRepository;
+import com.example.GreenGrub.entity.FoodRequest;
 import com.example.GreenGrub.services.InMemoryFoodService;
+import com.example.GreenGrub.repositories.TransactionRepository;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -20,7 +22,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
+import java.time.LocalDateTime;
+
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @Profile("no-db")
@@ -37,8 +43,13 @@ public class FoodController {
         this.foodService = foodService;
     }
 
-    // Post Excess Food
+    /**
+     * Post Excess Food (DONOR)
+     * @param food
+     * @return
+     */
     @PostMapping("/postExcessFood")
+    @Operation(summary = "Post Excess Food", description = "Allows donors to post excess food.")
     public ResponseEntity<Food> postExcessFood(@RequestBody Food food) {
 
         if (food == null) {
@@ -49,8 +60,11 @@ public class FoodController {
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
-    // Browse Available Food
+    /**
+     * Browse Available Food (RECIPIENT)
+     */
     @GetMapping("/browseAvailableFood")
+    @Operation(summary = "Browse Available Food", description = "Allows users to browse available food listings.")
     public ResponseEntity<List<Food>> browseAvailableFood() {
         List<Food> availableFoodList = foodService.getAvailableFood();
 
@@ -61,6 +75,7 @@ public class FoodController {
 
         return ResponseEntity.ok(availableFoodList);
     }
+
 
 //     //Request Food
 //    @PostMapping("/requestFood")
@@ -250,4 +265,74 @@ public class FoodController {
 //
 //        return new ArrayList<>();
 //    }
+  
+    /**
+     * Request Food (RECIPIENT)
+     * @param foodRequest
+     * @return
+     */
+    @PostMapping("/requestFood")
+    @Operation(summary = "Request Food", description = "Allows recipients to request food from available listings.")
+    public ResponseEntity<FoodRequest> requestFood(@RequestBody FoodRequest foodRequest) {
+
+        if (foodRequest == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        if (foodRequest.getFoodRequestId() == null || foodRequest.getFoodRequestId().isBlank()) {
+            foodRequest.setFoodRequestId("REQ-" + UUID.randomUUID());
+        }
+        if (foodRequest.getRequireOn() == null) {
+            foodRequest.setRequireOn(LocalDateTime.now().plusHours(2));
+        }
+
+        FoodRequest saved = foodService.requestFood(foodRequest);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+    }
+  
+    /**
+     * Browse Food Requests (DONOR)
+     */
+    @GetMapping("/browseFoodRequests")
+    @Operation(summary = "Browse Food Requests", description = "Allows donors to browse active food requests.")
+    public ResponseEntity<List<FoodRequest>> browseFoodRequests() {
+        List<FoodRequest> requests = foodService.getFoodRequests();
+        if (requests.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(requests);
+    }
+
+    /**
+     * Filter Food (in-memory)
+     */
+    @GetMapping("/filterFood")
+    @Operation(
+        summary = "Filter Food (in-memory)",
+        description = "Filter in-memory food listings by category, expiry date, and location."
+    )
+    public ResponseEntity<List<Food>> filterFood(
+        @RequestParam(required = false) String category,
+        @RequestParam(required = false)
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+        LocalDateTime expiryAfter,
+        @RequestParam(required = false) String location
+    ) {
+        List<Food> filtered = foodService.filterFood(category, expiryAfter, location);
+
+        if (filtered.isEmpty()) {
+            return ResponseEntity.ok(
+                (List<Food>) Map.of(
+                    "code", 404,
+                    "message", "No food items match the filter criteria",
+                    "suggestions", List.of("Try different filter values", "Check back later"),
+                    "timeStamp", LocalDateTime.now().toString()
+                )
+            );
+        }
+
+        return ResponseEntity.ok(filtered);
+    }
 }

@@ -2,6 +2,8 @@ package com.example.GreenGrub.entity;
 
 import com.example.GreenGrub.enumeration.DonationStatus;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Column;
@@ -19,6 +21,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -33,7 +36,8 @@ import java.util.List;
 public class Donation {
 
     @Id
-    @Column(name = "donation_id",  nullable = false, updatable = false, unique = true)
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "donation_id")
     private String donationId;
 
     @ElementCollection
@@ -70,6 +74,7 @@ public class Donation {
     private Address deliveryAddress;
 
     @Getter
+    @Setter
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private DonationStatus status;
@@ -79,24 +84,5 @@ public class Donation {
 
     @Column(nullable = false)
     private LocalDateTime updatedAt;
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public String getDonorId()
-    {
-        return donorId;
-    }
-
-    public String getRecipientId()
-    {
-        return recipientId;
-    }
-
-    public DonationStatus getStatus()
-    {
-        return status;
-    }
 
 }

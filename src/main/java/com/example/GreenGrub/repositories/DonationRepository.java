@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface DonationRepository extends JpaRepository<Donation, String> {
     List<Donation> findByDonorId(String donorId);
+    List<Donation> findByRecipientId(String recipientId);
 }
